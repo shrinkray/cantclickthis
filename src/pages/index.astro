@@ -1,7 +1,6 @@
 ---
 import '../styles/global.css';
 import { sections } from '../lib/sections.mjs';
-import { rulesEs } from '../lib/rules-es.mjs';
 import { renderSnippet } from '../lib/highlight.mjs';
 
 const title = 'The 80/20 of Accessibility — Small Fixes, Big Impact';
@@ -11,7 +10,6 @@ const description =
 // Highlighting happens here, at build time. The browser gets static HTML.
 const units = sections.map((section) => ({
   ...section,
-  ruleEs: rulesEs[section.id],
   failHighlighted: renderSnippet(section.failCode),
   fixHighlighted: renderSnippet(section.fixCode)
 }));
@@ -203,7 +201,6 @@ const transcript = [
 
           <blockquote class="rule">
             <p>{unit.rule}</p>
-            <p lang="es">{unit.ruleEs}</p>
           </blockquote>
 
           <template data-state="fail" set:html={unit.failMarkup}></template>
