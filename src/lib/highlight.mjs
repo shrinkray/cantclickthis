@@ -1,16 +1,37 @@
+// @ts-check
 /**
  * Tiny build-time syntax highlighter.
  *
  * Runs in Astro's frontmatter, so the browser receives plain static HTML —
  * no highlighter bundle, no runtime cost, no dependency to audit.
  * Handles the only two languages this site ships: HTML and CSS.
+ *
+ * @typedef {object} SnippetNote
+ * @property {number} line 1-based line number to flag in the gutter.
+ * @property {string} text Why this line matters.
+ *
+ * @typedef {object} Snippet
+ * @property {string} code Source text.
+ * @property {'html' | 'css'} [lang]
+ * @property {SnippetNote[]} notes
  */
 
+/** @type {Record<string, string>} */
 const ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' };
+
+/** @param {string} s */
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ESCAPES[c]);
+
+/**
+ * @param {string} cls
+ * @param {string} text
+ */
 const wrap = (cls, text) => `<span class="tok tok--${cls}">${esc(text)}</span>`;
 
-/** Highlight one line of HTML. */
+/**
+ * Highlight one line of HTML.
+ * @param {string} line
+ */
 function html(line) {
   let out = '';
   let i = 0;
@@ -44,7 +65,10 @@ function html(line) {
   return out;
 }
 
-/** Highlight the inside of a single `<...>` tag. */
+/**
+ * Highlight the inside of a single `<...>` tag.
+ * @param {string} src
+ */
 function tag(src) {
   const parts = src.match(/^(<\/?)([a-zA-Z][\w:-]*)?([\s\S]*?)(\/?>)?$/);
   if (!parts) return esc(src);
@@ -70,7 +94,10 @@ function tag(src) {
   return out + (close ? wrap('punct', close) : '');
 }
 
-/** Highlight one line of CSS. */
+/**
+ * Highlight one line of CSS.
+ * @param {string} line
+ */
 function css(line) {
   if (/^\s*\/\*/.test(line) || /\*\/\s*$/.test(line)) return wrap('comment', line);
 
@@ -93,19 +120,17 @@ function css(line) {
   return esc(line);
 }
 
+/** @type {{ html: (line: string) => string, css: (line: string) => string }} */
 const LANGS = { html, css };
 
 /**
  * Render a snippet as static, line-numbered, annotated HTML.
  *
- * @param {object}   snippet
- * @param {string}   snippet.code   Source text.
- * @param {string}  [snippet.lang]  'html' (default) or 'css'.
- * @param {Array}   [snippet.notes] [{ line: 1-based, text: 'why this breaks' }]
+ * @param {Snippet} snippet
  * @returns {string} HTML for the inside of a <code> element.
  */
 export function renderSnippet({ code, lang = 'html', notes = [] }) {
-  const highlighter = LANGS[lang] ?? LANGS.html;
+  const highlighter = lang === 'css' ? LANGS.css : LANGS.html;
   const flagged = new Map(notes.map((n, index) => [n.line, index + 1]));
 
   return code
