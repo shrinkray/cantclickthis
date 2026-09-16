@@ -1,9 +1,9 @@
 /**
  * Beat-synced lyric display.
  *
- * The JSON carries line-level cues. Word timings inside a line are
- * interpolated by word length, which tracks a rapped line closely enough
- * at this size and means the timing file stays small enough to hand-tune.
+ * Consecutive lines that share a `part` (Intro, Chorus, Verse, Outro) are
+ * one stanza. The stage shows the whole stanza and marks the line that
+ * matches the playhead — no word-level interpolation.
  *
  * Accessibility note: the animated box is aria-hidden. The <audio> element
  * ships a real WebVTT caption track, and that is what assistive tech and
@@ -13,13 +13,11 @@
 
 const audio = document.querySelector('[data-track]');
 const display = document.getElementById('lyric-box');
-const lineOut = document.querySelector('[data-lyric-line]');
 
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-let cues = [];
+let stanzas = [];
 let frame = null;
-let lastWord = null;
+let lastStanzaStart = null;
+let lastLineIndex = null;
 
 const IDLE = 'Press play';
 
@@ -27,22 +25,52 @@ function setIdle() {
   if (!display) return;
   display.dataset.idle = 'true';
   display.textContent = IDLE;
-  if (lineOut) lineOut.textContent = '';
-  lastWord = null;
+  lastStanzaStart = null;
+  lastLineIndex = null;
 }
 
-/** Split a line into words, each given a slice of the line proportional to its length. */
-function toWords(line) {
-  const tokens = line.text.split(/\s+/).filter(Boolean);
-  const span = Math.max(0.001, line.end - line.start);
-  const weight = tokens.reduce((total, word) => total + word.length + 1, 0);
+/** Group consecutive lines with the same `part` so two Choruses stay separate. */
+function toStanzas(lines) {
+  const groups = [];
+  for (const line of lines) {
+    const current = groups[groups.length - 1];
+    if (current && current.part === line.part) {
+      current.lines.push(line);
+      current.end = line.end;
+    } else {
+      groups.push({
+        part: line.part,
+        start: line.start,
+        end: line.end,
+        lines: [line]
+      });
+    }
+  }
+  return groups;
+}
 
-  let cursor = line.start;
-  return tokens.map((word) => {
-    const duration = ((word.length + 1) / weight) * span;
-    const entry = { text: word, start: cursor, end: cursor + duration };
-    cursor += duration;
-    return entry;
+function renderStanza(stanza, currentIndex) {
+  delete display.dataset.idle;
+
+  const part = document.createElement('span');
+  part.className = 'lyric-part';
+  part.textContent = stanza.part;
+
+  const rows = stanza.lines.map((line, index) => {
+    const row = document.createElement('span');
+    row.className = 'lyric-line';
+    if (index === currentIndex) row.dataset.current = 'true';
+    row.textContent = line.text;
+    return row;
+  });
+
+  display.replaceChildren(part, ...rows);
+}
+
+function markCurrent(currentIndex) {
+  display.querySelectorAll('.lyric-line').forEach((row, index) => {
+    if (index === currentIndex) row.dataset.current = 'true';
+    else delete row.dataset.current;
   });
 }
 
@@ -52,7 +80,7 @@ async function load() {
     const response = await fetch('/lyrics/cantclickthis.json');
     if (!response.ok) throw new Error(String(response.status));
     const data = await response.json();
-    cues = data.lines.map((line) => ({ ...line, words: toWords(line) }));
+    stanzas = toStanzas(data.lines);
     setIdle();
   } catch {
     // No timing file is not a reason to break the hero.
@@ -62,26 +90,22 @@ async function load() {
 
 function paint() {
   const now = audio.currentTime;
-  const line = cues.find((cue) => now >= cue.start && now <= cue.end);
-  const word = line?.words.find((entry) => now >= entry.start && now <= entry.end);
+  const stanza = stanzas.find((group) => now >= group.start && now <= group.end);
 
-  if (lineOut) lineOut.textContent = line ? line.text : '';
-
-  if (word && word.text !== lastWord) {
-    lastWord = word.text;
-    delete display.dataset.idle;
-    display.textContent = word.text;
-
-    if (!reduceMotion.matches) {
-      display.classList.remove('bounce');
-      void display.offsetWidth; // force reflow so the animation restarts
-      display.classList.add('bounce');
+  if (stanza) {
+    const lineIndex = stanza.lines.findIndex((line) => now >= line.start && now <= line.end);
+    if (stanza.start !== lastStanzaStart) {
+      lastStanzaStart = stanza.start;
+      lastLineIndex = lineIndex;
+      renderStanza(stanza, lineIndex);
+    } else if (lineIndex !== lastLineIndex) {
+      lastLineIndex = lineIndex;
+      markCurrent(lineIndex);
     }
-  }
-
-  if (!line && display.dataset.idle !== 'true' && !audio.paused) {
+  } else if (display.dataset.idle !== 'true' && !audio.paused) {
     display.textContent = '\u2022\u2022\u2022';
-    lastWord = null;
+    lastStanzaStart = null;
+    lastLineIndex = null;
   }
 
   if (!audio.paused && !audio.ended) frame = requestAnimationFrame(paint);
@@ -94,6 +118,9 @@ audio?.addEventListener('play', () => {
 
 audio?.addEventListener('pause', () => cancelAnimationFrame(frame));
 audio?.addEventListener('ended', () => { cancelAnimationFrame(frame); setIdle(); });
-audio?.addEventListener('seeking', () => { lastWord = null; });
+audio?.addEventListener('seeking', () => {
+  lastStanzaStart = null;
+  lastLineIndex = null;
+});
 
 load();
