@@ -426,6 +426,10 @@ img { max-width: 100%; height: auto; }
   color: var(--lab-ink);
   margin-block-end: 0.5rem;
 }
+.lab-form input:focus::placeholder {
+  color: transparent;
+  opacity: 0;
+}
 .lab-fakelabel { font-weight: 650; font-size: 0.9rem; }
 .lab-hint { font-size: 0.82rem; color: #42526b; margin: 0 0 0.5rem; }
 .lab-hint--coloronly { color: #c0341a; font-weight: 700; }
