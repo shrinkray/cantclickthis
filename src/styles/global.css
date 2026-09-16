@@ -314,6 +314,10 @@ img { max-width: 100%; height: auto; }
   align-items: center;
   gap: 0.9rem;
 }
+.switchbar a {
+  color: var(--fix);
+  font-size: 0.9rem;
+}
 
 .switch {
   display: inline-flex;
