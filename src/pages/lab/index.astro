@@ -1,0 +1,55 @@
+---
+import '../../styles/global.css';
+import { sections } from '../../lib/sections.mjs';
+
+const title = 'Screen reader labs — cantclickthis.dev';
+const description =
+  'One accessibility pattern per page, so VoiceOver or NVDA can listen to the broken markup and the fix without the rest of the talk site in the way.';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark" />
+    <link rel="canonical" href="https://cantclickthis.dev/lab/" />
+  </head>
+
+  <body class="lab-page">
+    <a class="skip" href="#lab-list">Skip to the labs</a>
+
+    <header class="lab-page__banner">
+      <p class="hero__kicker">cantclickthis.dev</p>
+      <p><a href="/">Talk demo</a></p>
+    </header>
+
+    <main class="lab-page__main" id="main" tabindex="-1">
+      <h1>Screen reader labs</h1>
+      <p>
+        Each page is one pattern: broken markup, then the fix, and almost nothing else.
+        That keeps the headings list, the links list, and the tab order honest.
+      </p>
+      <p>
+        Turn on VoiceOver (Command + F5 on a Mac) or NVDA, open a lab, and toggle
+        <strong>Fixed version</strong> once you have heard the failure.
+      </p>
+
+      <nav aria-labelledby="lab-list-title">
+        <h2 id="lab-list-title">Labs</h2>
+        <ol class="lab-index" id="lab-list">
+          {sections.map((section) => (
+            <li>
+              <a href={`/lab/${section.id}`}>
+                <span aria-hidden="true">{section.n}</span>
+                <span>{section.title}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </main>
+  </body>
+</html>

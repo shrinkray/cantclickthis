@@ -1,0 +1,101 @@
+---
+import '../../styles/global.css';
+import { sections } from '../../lib/sections.mjs';
+
+export function getStaticPaths() {
+  return sections.map((section) => ({
+    params: { id: section.id },
+    props: { section }
+  }));
+}
+
+const { section } = Astro.props;
+const index = sections.findIndex((item) => item.id === section.id);
+const prev = index > 0 ? sections[index - 1] : null;
+const next = index < sections.length - 1 ? sections[index + 1] : null;
+const title = `${section.title} — Screen reader lab`;
+const description = section.tryIt;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark" />
+    <link rel="canonical" href={`https://cantclickthis.dev/lab/${section.id}`} />
+  </head>
+
+  <body class="lab-page">
+    <a class="skip" href={`#${section.id}`}>Skip to the specimen</a>
+
+    <p class="vh" role="status" aria-live="polite" data-announce></p>
+
+    <header class="lab-page__banner">
+      <p class="hero__kicker">Screen reader lab {section.n} of 05</p>
+      <p>
+        <a href="/lab/">All screen reader labs</a>
+        <span aria-hidden="true"> · </span>
+        <a href="/">Talk demo</a>
+      </p>
+    </header>
+
+    <main
+      class="lab-page__main"
+      id="main"
+      tabindex="-1"
+      data-unit
+      aria-labelledby={`${section.id}-title`}
+    >
+      <h1 id={`${section.id}-title`} data-unit-title>{section.title}</h1>
+      <p>{section.tryIt}</p>
+
+      <div class="switchbar">
+        <button type="button" class="switch" role="switch" aria-checked="false" data-switch>
+          <span class="switch__track" aria-hidden="true"></span>
+          <span>Fixed version<span class="vh"> of {section.title}</span></span>
+        </button>
+      </div>
+
+      <div class="lab" id={section.id} data-lab data-state="fail" tabindex="-1">
+        <p class="lab__bar">
+          <span class="lab__dot" aria-hidden="true"></span>
+          <span>example.com</span>
+          <span class="statepill" data-statepill data-state="fail" aria-hidden="true">
+            Broken markup
+          </span>
+        </p>
+        <div class="lab__stage" data-stage></div>
+      </div>
+
+      {section.id === 'link-text' && (
+        <>
+          <button type="button" class="btn" data-action="linklist">
+            List every link, the way a screen reader would
+          </button>
+          <div class="linklist" data-linklist-out aria-live="polite"></div>
+        </>
+      )}
+
+      <template data-state="fail" set:html={section.failMarkup}></template>
+      <template data-state="fix" set:html={section.fixMarkup}></template>
+    </main>
+
+    <nav class="lab-page__pager" aria-label="Labs">
+      {prev ? (
+        <a href={`/lab/${prev.id}`}>Previous: {prev.title}</a>
+      ) : (
+        <span></span>
+      )}
+      {next ? (
+        <a href={`/lab/${next.id}`}>Next: {next.title}</a>
+      ) : (
+        <a href="/lab/">Back to all labs</a>
+      )}
+    </nav>
+
+    <script src="../../scripts/app.js"></script>
+  </body>
+</html>
