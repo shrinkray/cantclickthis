@@ -1,9 +1,9 @@
 // @ts-check
 /**
- * Tiny build-time syntax highlighter.
+ * Tiny HTML/CSS syntax highlighter.
  *
- * Runs in Astro's frontmatter, so the browser receives plain static HTML —
- * no highlighter bundle, no runtime cost, no dependency to audit.
+ * Homepage panes call `renderSnippet` at build time. The lab editor calls
+ * `highlightCode` in the browser. Same tokenizer, no third-party highlighter.
  * Handles the only two languages this site ships: HTML and CSS.
  *
  * @typedef {object} SnippetNote
@@ -122,6 +122,21 @@ function css(line) {
 
 /** @type {{ html: (line: string) => string, css: (line: string) => string }} */
 const LANGS = { html, css };
+
+/**
+ * Highlight source without line-number chrome. Safe to run in the browser.
+ *
+ * @param {string} code
+ * @param {'html' | 'css'} [lang]
+ * @returns {string} HTML for the inside of a <code> element.
+ */
+export function highlightCode(code, lang = 'html') {
+  const highlighter = lang === 'css' ? LANGS.css : LANGS.html;
+  return String(code)
+    .split('\n')
+    .map((line) => highlighter(line) || '&nbsp;')
+    .join('\n');
+}
 
 /**
  * Render a snippet as static, line-numbered, annotated HTML.

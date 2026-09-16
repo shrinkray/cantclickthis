@@ -664,19 +664,58 @@ body:has(.buffer:not([hidden])) { padding-block-end: 32vh; }
   font-weight: 650;
   font-size: 0.9rem;
 }
+.lab-editor__wrap {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--ink-2);
+}
+.lab-editor__highlight,
 .lab-editor__code {
+  box-sizing: border-box;
   font-family: var(--mono);
   font-size: 0.85rem;
   line-height: 1.5;
   tab-size: 2;
+  padding: 0.85rem 0.9rem;
+  margin: 0;
+  white-space: pre;
+  overflow: auto;
+}
+.lab-editor__highlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: var(--paper);
+  scrollbar-width: none;
+}
+.lab-editor__highlight::-webkit-scrollbar {
+  display: none;
+}
+.lab-editor__highlight code {
+  display: block;
+  font: inherit;
+}
+.lab-editor__code {
+  position: relative;
+  z-index: 1;
+  display: block;
   width: 100%;
   min-height: 12rem;
-  padding: 0.85rem 0.9rem;
-  border: 1px solid var(--line);
+  border: 0;
   border-radius: 10px;
-  background: var(--ink-2);
-  color: var(--paper);
+  background: transparent;
+  color: transparent;
+  caret-color: var(--paper);
   resize: vertical;
+}
+.lab-editor__code::selection {
+  background: color-mix(in srgb, var(--fix) 40%, transparent);
+  color: transparent;
+}
+.lab-editor__code::-moz-selection {
+  background: color-mix(in srgb, var(--fix) 40%, transparent);
+  color: transparent;
 }
 .lab-editor__tools {
   display: flex;
