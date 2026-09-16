@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * The five anti-patterns, in talk order.
  *
@@ -7,8 +8,24 @@
  *
  * `failCode` / `fixCode` are what the audience reads. Keep them in sync with
  * the markup above them: if the code says it, the live demo must do it.
+ *
+ * @typedef {import('./highlight.mjs').Snippet} Snippet
+ *
+ * @typedef {object} Section
+ * @property {string} id
+ * @property {string} n
+ * @property {string} title
+ * @property {string} lede
+ * @property {string} rule
+ * @property {string[]} criteria
+ * @property {string} tryIt
+ * @property {string} failMarkup
+ * @property {string} fixMarkup
+ * @property {Snippet} failCode
+ * @property {Snippet} fixCode
  */
 
+/** @type {Section[]} */
 export const sections = [
   {
     id: 'clickable-div',

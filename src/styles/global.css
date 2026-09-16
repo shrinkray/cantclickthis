@@ -150,9 +150,6 @@ img { max-width: 100%; height: auto; }
 
 .hero__sub { color: var(--paper-dim); max-width: 54ch; font-size: 1.125rem; }
 
-/* The karaoke box. Marked aria-hidden in the markup: the <track> element
-   carries the real, synchronised captions, so announcing this too would
-   double up on anyone using a screen reader. */
 .beatbox {
   border: 1px solid var(--line);
   background:
@@ -165,46 +162,7 @@ img { max-width: 100%; height: auto; }
   max-width: 62rem;
 }
 
-.beatbox__stage {
-  min-height: clamp(5rem, 14vh, 9rem);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  overflow: hidden;
-}
-
-#lyric-box {
-  font-family: var(--mono);
-  font-size: clamp(2rem, 8vw, 5.5rem);
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: -0.03em;
-  display: inline-block;
-  transform-origin: center;
-  color: #ffffff;
-}
-#lyric-box[data-idle="true"] { color: var(--paper-dim); font-size: clamp(1rem, 2.6vw, 1.5rem); }
-
-.beatbox__line {
-  font-family: var(--mono);
-  font-size: 0.95rem;
-  color: var(--paper-dim);
-  text-align: center;
-  min-height: 1.5em;
-  margin: 0;
-  max-width: none;
-}
-
 .beatbox audio { width: 100%; }
-
-.bounce { animation: beat-pop 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-
-@keyframes beat-pop {
-  0%   { transform: scale(0.85); opacity: 0.7; }
-  50%  { transform: scale(1.15); opacity: 1; }
-  100% { transform: scale(1);    opacity: 1; }
-}
 
 .hero__meta {
   font-family: var(--mono);
@@ -279,7 +237,7 @@ img { max-width: 100%; height: auto; }
   display: grid;
   align-content: center;
   gap: clamp(1rem, 2.5vh, 2rem);
-  padding: clamp(3rem, 7vh, 5rem) var(--gutter);
+  padding: clamp(5rem, 7vh, 5rem) var(--gutter);
   padding-inline-end: clamp(3rem, 18vw, 17rem); /* clear of the jump nav */
   border-block-end: 1px solid var(--line);
 }
@@ -633,7 +591,6 @@ body:has(.buffer:not([hidden])) { padding-block-end: 32vh; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .bounce { animation: none; transform: none; }
   .switch__track::after,
   .switch__track { transition: none; }
 }

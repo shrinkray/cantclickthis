@@ -1,0 +1,29 @@
+---
+description: Commit completed work on the current branch; recommend a GitHub PR when the change is ready for review.
+alwaysApply: true
+---
+
+# Git workflow
+
+This repo rule overrides the default “only commit when asked” habit. Follow it on every coding turn.
+
+## Commits
+
+After a coherent unit of work is finished, create a git commit on the **current branch**. Do not wait to be asked. Do not switch or create branches unless the user asks.
+
+Use the standard git safety protocol:
+
+- `git status`, `git diff`, and `git log` before committing
+- Stage only the files that belong to this change
+- Pass the message through a HEREDOC; 1–2 sentences on **why**, matching this repo’s style
+- Never update git config, force-push, skip hooks, or commit secrets
+- Never amend unless the user asked, HEAD is ours, and the commit has not been pushed
+- If a hook rejects the commit, fix it and make a **new** commit — do not amend
+
+Skip the commit only when there is nothing to commit, or the change is still mid-edit.
+
+## Pull requests
+
+When the work on this branch is ready for review (feature or fix complete, not a half-done WIP), **recommend** opening a GitHub pull request. Do not run `gh pr create` until the user agrees.
+
+If the current branch is `main` or `master`, still commit here, and when recommending a PR suggest moving the work onto a feature branch first.

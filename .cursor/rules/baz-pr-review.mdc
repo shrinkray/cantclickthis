@@ -1,0 +1,18 @@
+---
+description: After Baz reviews a GitHub PR, filter its comments and list only the items worth addressing before changing any code.
+alwaysApply: true
+---
+
+# Baz PR review
+
+The user uses **Baz** on GitHub to review pull requests.
+
+When a PR is up and Baz has finished (or the user asks to look at Baz’s review):
+
+1. Read Baz’s comments on the PR (`gh` / review comments).
+2. Ignore suggestions that are not relevant to the work we actually did (style bikeshedding, speculative refactors, unrelated architecture, scope expansion).
+3. Keep the ones that catch real errors, regressions, missed edge cases, a11y bugs, or details we overlooked. Baz is strong at those.
+4. **Print those items** in the chat. Do not start fixing them.
+5. Wait. Discuss with the user. They will approve items or give guidance, then we update.
+
+Never apply Baz’s recommendations automatically.
