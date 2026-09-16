@@ -2,7 +2,7 @@
 
 Live demo site for the talk *The 80/20 of Accessibility — Small Fixes, Big Impact*
 (Greg Miller, Shrinkray Interactive). Static Astro site, five interactive
-fail/fix accessibility comparisons, a karaoke hero track, and a screen-reader
+fail/fix accessibility comparisons, a hero track with a transcript, and a screen-reader
 buffer panel for the room to watch live.
 
 ## Requirements
@@ -31,23 +31,9 @@ committed (`pnpm-lock.yaml`) and the only one CI/hosting will read.
 | `pnpm run dev` | Local dev server |
 | `pnpm run build` | Static build to `dist/` |
 | `pnpm run preview` | Serve the built `dist/` locally |
-| `pnpm run lyrics` | Regenerate `public/lyrics/cantclickthis.vtt` from `cantclickthis.json` |
 
-## The lyric timing file
-
-`public/lyrics/cantclickthis.json` ships with **estimated** line timings
-(`meta.timingsVerified: false`). To get real ones:
-
-1. `pnpm run dev`, open `/lyric-timer`
-2. Play the track, tap **Mark line** on the first beat of each line
-3. Download the JSON, drop it into `public/lyrics/`
-4. `pnpm run lyrics` to regenerate the `.vtt` from it
-
-The `.vtt` is not itself rendered by any browser on an `<audio>` element —
-captions only render on `<video>`. It exists for the recorded video versions
-of this page (screen captures used in the talk). The live accessible
-transcript in the hero's `<details>` is what actually satisfies WCAG 1.2.1 on
-the page itself.
+The hero audio is for the talk, not a timed karaoke demo. The transcript under
+the player is the accessible alternative (WCAG 1.2.1).
 
 ## Security posture (pnpm-workspace.yaml)
 
