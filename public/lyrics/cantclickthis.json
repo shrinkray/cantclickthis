@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "title": "Can't Click This",
+    "artist": "toledogeeks",
+    "duration": 63.96,
+    "timingsVerified": false,
+    "note": "Line times below are ESTIMATES. Open /lyric-timer to tap the real ones, then replace this file and run: pnpm run lyrics"
+  },
+  "lines": [
+    { "start": 0.60,  "end": 2.20,  "part": "Intro",  "kind": "sound",  "text": "[record scratch]" },
+    { "start": 2.20,  "end": 4.60,  "part": "Intro",  "text": "Yeah... Check the DOM." },
+    { "start": 4.60,  "end": 6.40,  "part": "Intro",  "text": "Check the tree." },
+    { "start": 6.40,  "end": 9.00,  "part": "Intro",  "text": "You can't tab through that." },
+
+    { "start": 9.00,  "end": 11.10, "part": "Chorus", "text": "You can't click this." },
+    { "start": 11.10, "end": 13.20, "part": "Chorus", "text": "You can't click this." },
+    { "start": 13.20, "end": 15.30, "part": "Chorus", "text": "You can't click this." },
+    { "start": 15.30, "end": 18.00, "part": "Chorus", "text": "Stop! Semantic time!" },
+
+    { "start": 18.00, "end": 20.90, "part": "Verse",  "text": "My, my, my, my markup hits so bad," },
+    { "start": 20.90, "end": 23.80, "part": "Verse",  "text": "Makes the screen reader user straight-up mad." },
+    { "start": 23.80, "end": 26.10, "part": "Verse",  "text": "Thank you for blessing me" },
+    { "start": 26.10, "end": 29.20, "part": "Verse",  "text": "With a clickable div that I just can't see!" },
+    { "start": 29.20, "end": 31.50, "part": "Verse",  "text": "No role, no focus state," },
+    { "start": 31.50, "end": 34.60, "part": "Verse",  "text": "Hit the Tab key once, now I gotta wait." },
+    { "start": 34.60, "end": 37.70, "part": "Verse",  "text": "Buttons look real, but they have no tags," },
+    { "start": 37.70, "end": 41.00, "part": "Verse",  "text": "Accessibility backlog drags." },
+
+    { "start": 41.00, "end": 43.40, "part": "Chorus", "text": "Can't tab this." },
+    { "start": 43.40, "end": 46.20, "part": "Chorus", "text": "Look, man, you can't click this." },
+    { "start": 46.20, "end": 49.40, "part": "Chorus", "text": "No aria-label, can't click this." },
+    { "start": 49.40, "end": 52.00, "part": "Chorus", "text": "Stop! Semantic time!" },
+
+    { "start": 52.00, "end": 55.20, "part": "Outro",  "text": "Just use a button." },
+    { "start": 55.20, "end": 59.00, "part": "Outro",  "text": "CantClickThis.dev." },
+    { "start": 59.00, "end": 63.40, "part": "Outro",  "text": "Stop! Semantic time!" }
+  ]
+}

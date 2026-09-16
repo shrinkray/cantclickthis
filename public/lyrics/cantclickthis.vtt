@@ -1,0 +1,95 @@
+WEBVTT
+NOTE Can't Click This — toledogeeks
+NOTE Timings are estimates. Run /lyric-timer to correct them.
+
+1
+00:00:00.600 --> 00:00:02.200
+[record scratch]
+
+2
+00:00:02.200 --> 00:00:04.600
+Yeah... Check the DOM.
+
+3
+00:00:04.600 --> 00:00:06.400
+Check the tree.
+
+4
+00:00:06.400 --> 00:00:09.000
+You can't tab through that.
+
+5
+00:00:09.000 --> 00:00:11.100
+You can't click this.
+
+6
+00:00:11.100 --> 00:00:13.200
+You can't click this.
+
+7
+00:00:13.200 --> 00:00:15.300
+You can't click this.
+
+8
+00:00:15.300 --> 00:00:18.000
+Stop! Semantic time!
+
+9
+00:00:18.000 --> 00:00:20.900
+My, my, my, my markup hits so bad,
+
+10
+00:00:20.900 --> 00:00:23.800
+Makes the screen reader user straight-up mad.
+
+11
+00:00:23.800 --> 00:00:26.100
+Thank you for blessing me
+
+12
+00:00:26.100 --> 00:00:29.200
+With a clickable div that I just can't see!
+
+13
+00:00:29.200 --> 00:00:31.500
+No role, no focus state,
+
+14
+00:00:31.500 --> 00:00:34.600
+Hit the Tab key once, now I gotta wait.
+
+15
+00:00:34.600 --> 00:00:37.700
+Buttons look real, but they have no tags,
+
+16
+00:00:37.700 --> 00:00:41.000
+Accessibility backlog drags.
+
+17
+00:00:41.000 --> 00:00:43.400
+Can't tab this.
+
+18
+00:00:43.400 --> 00:00:46.200
+Look, man, you can't click this.
+
+19
+00:00:46.200 --> 00:00:49.400
+No aria-label, can't click this.
+
+20
+00:00:49.400 --> 00:00:52.000
+Stop! Semantic time!
+
+21
+00:00:52.000 --> 00:00:55.200
+Just use a button.
+
+22
+00:00:55.200 --> 00:00:59.000
+CantClickThis.dev.
+
+23
+00:00:59.000 --> 00:01:03.400
+Stop! Semantic time!

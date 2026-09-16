@@ -1,0 +1,17 @@
+{
+  "name": "cantclickthis",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Live demo site for the talk: The 80/20 of Accessibility — Small Fixes, Big Impact",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "lyrics": "node scripts/build-vtt.mjs"
+  },
+  "devDependencies": {
+    "astro": "^5.0.0"
+  },
+  "packageManager": "pnpm@12.4.2"
+}

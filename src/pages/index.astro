@@ -1,0 +1,250 @@
+---
+import '../styles/global.css';
+import { sections } from '../lib/sections.mjs';
+import { rulesEs } from '../lib/rules-es.mjs';
+import { renderSnippet } from '../lib/highlight.mjs';
+
+const title = 'The 80/20 of Accessibility — Small Fixes, Big Impact';
+const description =
+  'Five accessibility failures you can fix today, each shown broken and fixed side by side, with the markup that makes the difference.';
+
+// Highlighting happens here, at build time. The browser gets static HTML.
+const units = sections.map((section) => ({
+  ...section,
+  ruleEs: rulesEs[section.id],
+  failHighlighted: renderSnippet(section.failCode),
+  fixHighlighted: renderSnippet(section.fixCode)
+}));
+
+const transcript = [
+  ['Intro', ['[record scratch]', 'Yeah… Check the DOM.', 'Check the tree.', "You can't tab through that."]],
+  ['Chorus', ["You can't click this.", "You can't click this.", "You can't click this.", 'Stop! Semantic time!']],
+  ['Verse', [
+    'My, my, my, my markup hits so bad,',
+    'Makes the screen reader user straight-up mad.',
+    'Thank you for blessing me',
+    "With a clickable div that I just can't see!",
+    'No role, no focus state,',
+    'Hit the Tab key once, now I gotta wait.',
+    'Buttons look real, but they have no tags,',
+    'Accessibility backlog drags.'
+  ]],
+  ['Chorus', ["Can't tab this.", "Look, man, you can't click this.", "No aria-label, can't click this.", 'Stop! Semantic time!']],
+  ['Outro', ['Just use a button.', 'CantClickThis.dev.', 'Stop! Semantic time!']]
+];
+---
+
+<!doctype html>
+<html lang="en" class="snap">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://cantclickthis.dev/" />
+    <link rel="canonical" href="https://cantclickthis.dev/" />
+    <link rel="preload" as="fetch" href="/lyrics/cantclickthis.json" crossorigin />
+  </head>
+
+  <body>
+    <a class="skip" href="#main">Skip to the demos</a>
+    <a class="skip" href="#jump">Skip to section navigation</a>
+
+    <!-- Announcements for state changes. Polite, so it never interrupts. -->
+    <p class="vh" role="status" aria-live="polite" data-announce></p>
+
+    <header class="hero" id="top">
+      <p class="hero__kicker">cantclickthis.dev</p>
+      <h1 class="hero__title">You can't click this</h1>
+      <p class="hero__sub">
+        Five ways websites lock people out, each one live and broken on this page —
+        then fixed, in the same breath, with the markup that did it.
+      </p>
+
+      <div class="beatbox">
+        <!-- Decorative: the transcript below carries the words for anyone
+             who needs them, so announcing this too would just double up. -->
+        <div class="beatbox__stage" aria-hidden="true">
+          <span id="lyric-box" data-idle="true">Press play</span>
+        </div>
+        <p class="beatbox__line" data-lyric-line aria-hidden="true"></p>
+
+        <audio controls preload="metadata" data-track>
+          <source src="/audio/cantclickthis.mp3" type="audio/mpeg" />
+          <source src="/audio/cantclickthis.m4a" type="audio/mp4" />
+          <track
+            kind="captions"
+            src="/lyrics/cantclickthis.vtt"
+            srclang="en"
+            label="English"
+            default
+          />
+          <p>
+            Your browser can't play this file.
+            <a href="/audio/cantclickthis.mp3">Download the track instead</a>.
+          </p>
+        </audio>
+
+        <details class="transcript">
+          <summary>Read the transcript</summary>
+          {transcript.map(([part, lines]) => (
+            <>
+              <p><strong>{part}</strong></p>
+              <p>{lines.map((line) => (<>{line}<br /></>))}</p>
+            </>
+          ))}
+        </details>
+      </div>
+
+      <p class="hero__meta">
+        <span>Greg Miller, Shrinkray Interactive</span>
+        <span>Track: “Can't Click This” by toledogeeks</span>
+      </p>
+    </header>
+
+    <nav class="jump" id="jump" aria-label="Sections" data-jump tabindex="-1">
+      <p class="jump__title" id="jump-title">Jump to</p>
+      <ol aria-labelledby="jump-title">
+        {units.map((unit) => (
+          <li>
+            <a href={`#${unit.id}`}>
+              <span aria-hidden="true">{unit.n}</span>
+              <span>{unit.title}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+      <div class="jump__tools">
+        <button type="button" class="btn" data-buffer-toggle aria-expanded="false" aria-controls="buffer">
+          <span data-buffer-label>Show screen reader buffer</span>
+        </button>
+        <button type="button" class="btn" data-snap-toggle aria-pressed="true">
+          <span data-snap-label>Capture mode: on</span>
+        </button>
+      </div>
+    </nav>
+
+    <main id="main" tabindex="-1">
+      {units.map((unit) => (
+        <section
+          class="unit"
+          id={unit.id}
+          aria-labelledby={`${unit.id}-title`}
+          data-unit
+          tabindex="-1"
+        >
+          <div class="unit__head">
+            <p class="unit__n">{unit.n} of 05</p>
+            <h2 class="unit__title" id={`${unit.id}-title`} data-unit-title>{unit.title}</h2>
+            <p class="unit__lede">{unit.lede}</p>
+            <ul class="criteria">
+              {unit.criteria.map((criterion) => <li>{criterion}</li>)}
+            </ul>
+          </div>
+
+          <div class="switchbar">
+            <button type="button" class="switch" role="switch" aria-checked="false" data-switch>
+              <span class="switch__track" aria-hidden="true"></span>
+              <span>Fixed version<span class="vh"> of {unit.title}</span></span>
+            </button>
+          </div>
+
+          <div class="unit__body">
+            <div>
+              <div class="lab" data-lab data-state="fail">
+                <p class="lab__bar">
+                  <span class="lab__dot" aria-hidden="true"></span>
+                  <span>example.com</span>
+                  <span class="statepill" data-statepill data-state="fail" aria-hidden="true">
+                    Broken markup
+                  </span>
+                </p>
+                <div class="lab__stage" data-stage></div>
+              </div>
+
+              <p class="lab__try">{unit.tryIt}</p>
+
+              {unit.id === 'link-text' && (
+                <>
+                  <button type="button" class="btn" data-action="linklist">
+                    List every link, the way a screen reader would
+                  </button>
+                  <div class="linklist" data-linklist-out aria-live="polite"></div>
+                </>
+              )}
+            </div>
+
+            <div class="panes">
+              <article class="pane" data-kind="fail" data-active="true" aria-labelledby={`${unit.id}-fail`}>
+                <h3 class="pane__head" id={`${unit.id}-fail`}>
+                  <span class="pane__mark" aria-hidden="true">✕</span> What breaks it
+                </h3>
+                <pre tabindex="0" role="group" aria-label={`Broken code for ${unit.title}`}><code set:html={unit.failHighlighted} /></pre>
+                <ol class="notes">
+                  {unit.failCode.notes.map((note) => <li>{note.text}</li>)}
+                </ol>
+              </article>
+
+              <article class="pane" data-kind="fix" data-active="false" aria-labelledby={`${unit.id}-fix`}>
+                <h3 class="pane__head" id={`${unit.id}-fix`}>
+                  <span class="pane__mark" aria-hidden="true">✓</span> What fixes it
+                </h3>
+                <pre tabindex="0" role="group" aria-label={`Fixed code for ${unit.title}`}><code set:html={unit.fixHighlighted} /></pre>
+                <ol class="notes">
+                  {unit.fixCode.notes.map((note) => <li>{note.text}</li>)}
+                </ol>
+              </article>
+            </div>
+          </div>
+
+          <blockquote class="rule">
+            <p>{unit.rule}</p>
+            <p lang="es">{unit.ruleEs}</p>
+          </blockquote>
+
+          <template data-state="fail" set:html={unit.failMarkup}></template>
+          <template data-state="fix" set:html={unit.fixMarkup}></template>
+        </section>
+      ))}
+    </main>
+
+    <footer class="foot">
+      <h2>Twenty percent of the effort, eighty percent of the pain</h2>
+      <p>
+        Nothing on this page is advanced. Five patterns cover most of what breaks on a
+        real site, and every fix is shorter than the thing it replaces.
+      </p>
+      <ul>
+        <li>Install a contrast checker extension and run it on whatever you are building now.</li>
+        <li>Tab through your own project once, start to finish, before you ship it.</li>
+        <li>Turn on VoiceOver (Command + F5 on a Mac) or NVDA (free, Windows) and listen to one page.</li>
+      </ul>
+      <p>
+        Built for the Latin Heritage Month Innovation Summit by
+        <a href="https://shrinkrayinteractive.com">Shrinkray Interactive</a>.
+        <a href="#top">Back to the top</a>.
+      </p>
+    </footer>
+
+    <section class="buffer" id="buffer" hidden data-buffer aria-labelledby="buffer-title">
+      <div class="buffer__head">
+        <h2 class="vh" id="buffer-title">Screen reader buffer</h2>
+        <p aria-hidden="true">
+          Approximate announcement for the focused element. Teaching aid, not a screen reader.
+        </p>
+        <p aria-hidden="true">Newest first</p>
+      </div>
+      <!-- aria-hidden on purpose: anyone running a real screen reader is
+           already hearing all of this, and mirroring it would double up. -->
+      <ul class="buffer__log" data-buffer-log aria-hidden="true"></ul>
+    </section>
+
+    <script src="../scripts/app.js"></script>
+    <script src="../scripts/lyrics.js"></script>
+    <script src="../scripts/sr-buffer.js"></script>
+  </body>
+</html>

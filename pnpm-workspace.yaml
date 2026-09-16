@@ -1,0 +1,33 @@
+# Required in pnpm 11 even for a single-package repo — this is the only
+# place pnpm reads its settings from; .npmrc no longer carries them.
+#
+# Values are pinned explicitly, including ones that match the v11 default,
+# so a future pnpm downgrade can't silently weaken them.
+
+minimumReleaseAge: 1440              # 24h cooldown before a fresh release is installable
+minimumReleaseAgeStrict: true
+minimumReleaseAgeIgnoreMissingTime: false   # default (true) skips the check entirely — closed here
+
+blockExoticSubdeps: true             # no git/tarball transitive dependencies
+trustPolicy: no-downgrade
+trustLockfile: false                 # re-verify integrity even when installing from the lockfile
+
+# Only these packages may run install (postinstall/preinstall) scripts.
+# Named, not version-pinned: minimumReleaseAge above already blocks a
+# same-version-number malicious republish, so version pins here would only
+# add Dependabot churn for no extra safety.
+#   esbuild  — needed by Astro/Vite to select the right native transform binary
+#   sharp    — Astro's built-in image pipeline; compiles/selects libvips bindings
+#   fsevents — macOS-only file watcher; a no-op build on Linux, harmless to allow
+allowBuilds:
+  esbuild: true
+  sharp: true
+  fsevents: true
+
+strictDepBuilds: true                # an unreviewed build script fails the install, not just a warning
+verifyDepsBeforeRun: error           # never silently auto-install on script/dev/build
+
+# No overrides or resolutions existed in package.json at migration time —
+# nothing to carry across. Add entries here (not to package.json) if that
+# ever changes; pnpm does not read npm-style top-level `overrides`.
+overrides: {}
