@@ -150,9 +150,6 @@ img { max-width: 100%; height: auto; }
 
 .hero__sub { color: var(--paper-dim); max-width: 54ch; font-size: 1.125rem; }
 
-/* The karaoke box. Marked aria-hidden in the markup: the <track> element
-   carries the real, synchronised captions, so announcing this too would
-   double up on anyone using a screen reader. */
 .beatbox {
   border: 1px solid var(--line);
   background:
@@ -163,50 +160,6 @@ img { max-width: 100%; height: auto; }
   display: grid;
   gap: 0.85rem;
   max-width: 62rem;
-}
-
-.beatbox__stage {
-  min-height: clamp(8rem, 22vh, 14rem);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-#lyric-box {
-  font-family: var(--mono);
-  font-size: clamp(1.05rem, 2.6vw, 1.65rem);
-  font-weight: 650;
-  letter-spacing: -0.02em;
-  line-height: 1.4;
-  display: grid;
-  justify-items: center;
-  gap: 0.2rem;
-  width: 100%;
-  color: #ffffff;
-}
-#lyric-box[data-idle="true"] {
-  color: var(--paper-dim);
-  font-size: clamp(1rem, 2.6vw, 1.5rem);
-  font-weight: 700;
-}
-
-.lyric-part {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--fix);
-  margin-block-end: 0.45rem;
-}
-
-.lyric-line {
-  color: var(--paper-dim);
-  max-width: 42ch;
-}
-.lyric-line[data-current="true"] {
-  color: #ffffff;
-  font-weight: 800;
 }
 
 .beatbox audio { width: 100%; }

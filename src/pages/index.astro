@@ -16,7 +16,7 @@ const units = sections.map((section) => ({
 
 const transcript = [
   ['Intro', ['[record scratch]', 'Yeah… Check the DOM.', 'Check the tree.', "You can't tab through that."]],
-  ['Chorus', ["You can't click this.", "You can't click this.", "You can't click this.", 'Stop! Semantic time!']],
+  ['Chorus', ["You can't click this.", "You can't, can't, cant", "You can't click this.", "You can't click this.", 'Stop! Semantic time!']],
   ['Verse', [
     'My, my, my, my markup hits so bad,',
     'Makes the screen reader user straight-up mad.',
@@ -45,7 +45,6 @@ const transcript = [
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://cantclickthis.dev/" />
     <link rel="canonical" href="https://cantclickthis.dev/" />
-    <link rel="preload" as="fetch" href="/lyrics/cantclickthis.json" crossorigin />
   </head>
 
   <body>
@@ -64,22 +63,9 @@ const transcript = [
       </p>
 
       <div class="beatbox">
-        <!-- Decorative: the transcript below carries the words for anyone
-             who needs them, so announcing this too would just double up. -->
-        <div class="beatbox__stage" aria-hidden="true">
-          <div id="lyric-box" data-idle="true">Press play</div>
-        </div>
-
-        <audio controls preload="metadata" data-track>
+        <audio controls preload="metadata">
           <source src="/audio/cantclickthis.mp3" type="audio/mpeg" />
           <source src="/audio/cantclickthis.m4a" type="audio/mp4" />
-          <track
-            kind="captions"
-            src="/lyrics/cantclickthis.vtt"
-            srclang="en"
-            label="English"
-            default
-          />
           <p>
             Your browser can't play this file.
             <a href="/audio/cantclickthis.mp3">Download the track instead</a>.
@@ -240,7 +226,6 @@ const transcript = [
     </section>
 
     <script src="../scripts/app.js"></script>
-    <script src="../scripts/lyrics.js"></script>
     <script src="../scripts/sr-buffer.js"></script>
   </body>
 </html>
