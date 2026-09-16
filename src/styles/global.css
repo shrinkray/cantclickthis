@@ -631,7 +631,7 @@ body:has(.buffer:not([hidden])) { padding-block-end: 32vh; }
   padding: 2rem var(--gutter) 2.5rem;
   display: grid;
   gap: 1rem;
-  max-width: 46rem;
+  max-width: 52rem;
 }
 .lab-page__main h1 {
   font-size: clamp(1.8rem, 4vw, 2.8rem);
@@ -640,6 +640,55 @@ body:has(.buffer:not([hidden])) { padding-block-end: 32vh; }
 }
 .lab-page__main .lab { margin-block-start: 0.25rem; }
 .lab-page__main .btn { justify-self: start; }
+
+.lab-page__label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: var(--mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  margin: 0 0 0.45rem;
+}
+
+.lab-editor {
+  display: grid;
+  gap: 0.65rem;
+  margin-block-start: 0.5rem;
+}
+.lab-editor label {
+  font-weight: 650;
+  font-size: 0.9rem;
+}
+.lab-editor__code {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  tab-size: 2;
+  width: 100%;
+  min-height: 12rem;
+  padding: 0.85rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--ink-2);
+  color: var(--paper);
+  resize: vertical;
+}
+.lab-editor__tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.lab-page__pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding: 0 var(--gutter) 3rem;
+  max-width: 52rem;
+}
+.lab-page__pager a { color: var(--fix); }
 
 .lab-index {
   list-style: none;
@@ -666,13 +715,3 @@ body:has(.buffer:not([hidden])) { padding-block-end: 32vh; }
   font-size: 0.8rem;
   color: var(--fix);
 }
-
-.lab-page__pager {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.75rem 1.5rem;
-  padding: 0 var(--gutter) 3rem;
-  max-width: 46rem;
-}
-.lab-page__pager a { color: var(--fix); }

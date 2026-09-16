@@ -15,6 +15,9 @@ const prev = index > 0 ? sections[index - 1] : null;
 const next = index < sections.length - 1 ? sections[index + 1] : null;
 const title = `${section.title} — Screen reader lab`;
 const description = section.tryIt;
+const failMarkup = section.failMarkup.trim();
+const fixMarkup = section.fixMarkup.trim();
+const source = JSON.stringify({ fail: failMarkup, fix: fixMarkup });
 ---
 
 <!doctype html>
@@ -29,7 +32,7 @@ const description = section.tryIt;
   </head>
 
   <body class="lab-page">
-    <a class="skip" href={`#${section.id}`}>Skip to the specimen</a>
+    <a class="skip" href="#example">Skip to the example</a>
 
     <p class="vh" role="status" aria-live="polite" data-announce></p>
 
@@ -42,45 +45,44 @@ const description = section.tryIt;
       </p>
     </header>
 
-    <main
-      class="lab-page__main"
-      id="main"
-      tabindex="-1"
-      data-unit
-      aria-labelledby={`${section.id}-title`}
-    >
-      <h1 id={`${section.id}-title`} data-unit-title>{section.title}</h1>
+    <main class="lab-page__main" id="main" data-playground>
+      <h1>{section.title}</h1>
       <p>{section.tryIt}</p>
 
-      <div class="switchbar">
-        <button type="button" class="switch" role="switch" aria-checked="false" data-switch>
-          <span class="switch__track" aria-hidden="true"></span>
-          <span>Fixed version<span class="vh"> of {section.title}</span></span>
-        </button>
-      </div>
+      <section id="example" aria-labelledby="example-title">
+        <h2 class="lab-page__label" id="example-title">Example</h2>
+        <div class="lab">
+          <p class="lab__bar" aria-hidden="true">
+            <span class="lab__dot"></span>
+            <span>example.com</span>
+          </p>
+          <div class="lab__stage" data-stage set:html={failMarkup}></div>
+        </div>
+      </section>
 
-      <div class="lab" id={section.id} data-lab data-state="fail" tabindex="-1">
-        <p class="lab__bar">
-          <span class="lab__dot" aria-hidden="true"></span>
-          <span>example.com</span>
-          <span class="statepill" data-statepill data-state="fail" aria-hidden="true">
-            Broken markup
-          </span>
+      <section class="lab-editor" aria-labelledby="editor-title">
+        <h2 class="lab-page__label" id="editor-title">Markup</h2>
+        <p>
+          Edit the HTML. The example above is live in this page, so Tab and a
+          screen reader read it the same way they would on any other site.
         </p>
-        <div class="lab__stage" data-stage></div>
-      </div>
+        <label for="lab-markup">HTML for the example</label>
+        <textarea
+          id="lab-markup"
+          class="lab-editor__code"
+          data-editor
+          spellcheck="false"
+          autocapitalize="off"
+          autocomplete="off"
+          rows="12"
+        >{failMarkup}</textarea>
+        <div class="lab-editor__tools">
+          <button type="button" class="btn" data-reset>Reset to the starting markup</button>
+          <button type="button" class="btn" data-load-fix>Load one possible fix</button>
+        </div>
+      </section>
 
-      {section.id === 'link-text' && (
-        <>
-          <button type="button" class="btn" data-action="linklist">
-            List every link, the way a screen reader would
-          </button>
-          <div class="linklist" data-linklist-out aria-live="polite"></div>
-        </>
-      )}
-
-      <template data-state="fail" set:html={section.failMarkup}></template>
-      <template data-state="fix" set:html={section.fixMarkup}></template>
+      <script type="application/json" data-lab-source set:html={source}></script>
     </main>
 
     <nav class="lab-page__pager" aria-label="Labs">
@@ -97,5 +99,6 @@ const description = section.tryIt;
     </nav>
 
     <script src="../../scripts/app.js"></script>
+    <script src="../../scripts/lab.js"></script>
   </body>
 </html>
