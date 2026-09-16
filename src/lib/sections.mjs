@@ -165,7 +165,7 @@ button:focus-visible {
     lede: 'Screen reader users pull up a list of every link on the page to navigate it. Out of context, most link text collapses into noise.',
     rule: 'Link text has to make sense with the sentence around it removed. Read the links on their own — if you cannot tell them apart, neither can anyone else.',
     criteria: ['WCAG 2.4.4 Link Purpose', 'WCAG 2.4.9 Link Purpose, Link Only'],
-    tryIt: 'Use the links list button below. That list is exactly what a screen reader user gets.',
+    tryIt: 'Open the links list in VoiceOver or NVDA. Out of context, these three links all say nothing useful.',
     failMarkup: `
 <div class="lab-prose" data-linksource>
   <p>Registration for DevFest closes Friday. <a href="#link-text">Click here</a> to sign up.</p>
