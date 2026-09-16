@@ -34,7 +34,7 @@ const failHighlighted = highlightCode(failMarkup);
   </head>
 
   <body class="lab-page">
-    <a class="skip" href="#example">Skip to the example</a>
+    <a class="skip" href={`#${section.id}`}>Skip to the example</a>
 
     <p class="vh" role="status" aria-live="polite" data-announce></p>
 
@@ -51,7 +51,7 @@ const failHighlighted = highlightCode(failMarkup);
       <h1>{section.title}</h1>
       <p>{section.tryIt}</p>
 
-      <section id="example" aria-labelledby="example-title">
+      <section id={section.id} aria-labelledby="example-title">
         <h2 class="lab-page__label" id="example-title">Example</h2>
         <div class="lab">
           <p class="lab__bar" aria-hidden="true">

@@ -90,7 +90,8 @@ document.addEventListener('click', (event) => {
 
   if (trigger.dataset.action === 'linklist') {
     const unit = trigger.closest('[data-unit]');
-    const panel = unit.querySelector('[data-linklist-out]');
+    const panel = unit?.querySelector('[data-linklist-out]');
+    if (!unit || !panel) return;
     const links = [...unit.querySelectorAll('[data-linksource] a')];
     const items = links
       .map((link) => `<li>${link.textContent.trim()}</li>`)
