@@ -90,7 +90,8 @@ document.addEventListener('click', (event) => {
 
   if (trigger.dataset.action === 'linklist') {
     const unit = trigger.closest('[data-unit]');
-    const panel = unit.querySelector('[data-linklist-out]');
+    const panel = unit?.querySelector('[data-linklist-out]');
+    if (!unit || !panel) return;
     const links = [...unit.querySelectorAll('[data-linksource] a')];
     const items = links
       .map((link) => `<li>${link.textContent.trim()}</li>`)
@@ -167,13 +168,15 @@ function setSnap(on) {
   try { localStorage.setItem(SNAP_KEY, on ? '1' : '0'); } catch { /* private mode */ }
 }
 
-let snapStart = true;
-try {
-  const stored = localStorage.getItem(SNAP_KEY);
-  if (stored !== null) snapStart = stored === '1';
-} catch { /* private mode */ }
+if (snapToggle) {
+  let snapStart = true;
+  try {
+    const stored = localStorage.getItem(SNAP_KEY);
+    if (stored !== null) snapStart = stored === '1';
+  } catch { /* private mode */ }
 
-setSnap(snapStart);
-snapToggle?.addEventListener('click', () => {
-  setSnap(snapToggle.getAttribute('aria-pressed') !== 'true');
-});
+  setSnap(snapStart);
+  snapToggle.addEventListener('click', () => {
+    setSnap(snapToggle.getAttribute('aria-pressed') !== 'true');
+  });
+}

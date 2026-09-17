@@ -15,7 +15,7 @@ Use the standard git safety protocol:
 
 - `git status`, `git diff`, and `git log` before committing
 - Stage only the files that belong to this change
-- Pass the message through a HEREDOC; 1–2 sentences on **why**, matching this repo’s style
+- Pass the message through a HEREDOC using Conventional Commits: `type(optional-scope): summary` (for example `feat:`, `fix:`, `chore:`), then a short body on **why** when it is not obvious
 - Never update git config, force-push, skip hooks, or commit secrets
 - Never amend unless the user asked, HEAD is ours, and the commit has not been pushed
 - If a hook rejects the commit, fix it and make a **new** commit — do not amend

@@ -1,0 +1,33 @@
+---
+import SiteLogo from './SiteLogo.astro';
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="brand-foot">
+  <a
+    class="brand-foot__mark"
+    href="https://shrinkraylabs.com/"
+    aria-label="Shrinkray Labs homepage"
+  >
+    <SiteLogo width="72" height="72" />
+    <span class="brand-foot__name">Shrinkray Labs</span>
+  </a>
+  <div class="brand-foot__copy">
+    <p>
+      &copy; {currentYear} —
+      <a href="https://shrinkraylabs.com/">Shrinkray Labs</a>, the blog and
+      portfolio of Shrinkray Interactive, LLC.
+    </p>
+    <p>
+      <strong>Looking for WordPress help?</strong>
+      Visit my website offering <a
+        href="https://gregmiller.io"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Greg Miller’s WordPress site, opens in a new tab"
+      >specialized WordPress maintenance and
+      development services</a>.
+    </p>
+  </div>
+</footer>

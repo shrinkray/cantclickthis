@@ -1,0 +1,68 @@
+---
+import '../../styles/global.css';
+import { sections } from '../../lib/sections.mjs';
+import BrandFooter from '../../components/BrandFooter.astro';
+
+const title = 'Screen reader labs — cantclickthis.dev';
+const description =
+  'One accessibility pattern per page, so VoiceOver or NVDA can listen to the broken markup and the fix without the rest of the talk site in the way.';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://cantclickthis.dev/lab/" />
+    <meta property="og:image" content="https://cantclickthis.dev/social-card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href="https://cantclickthis.dev/lab/" />
+  </head>
+
+  <body class="lab-page">
+    <a class="skip" href="#lab-list">Skip to the labs</a>
+
+    <header class="lab-page__banner">
+      <p class="hero__kicker">cantclickthis.dev</p>
+      <p><a href="/">Talk demo</a></p>
+    </header>
+
+    <main class="lab-page__main" id="main" tabindex="-1">
+      <h1>Screen reader labs</h1>
+      <p>
+        Each page is one pattern, starting from the broken markup, with almost
+        nothing else on it. That keeps the headings list, the links list, and the
+        tab order honest.
+      </p>
+      <p>
+        Turn on VoiceOver (Command + F5 on a Mac) or NVDA, open a lab, and Tab
+        into the example. Change the HTML in the editor when you want to try a fix.
+      </p>
+
+      <nav aria-labelledby="lab-list-title">
+        <h2 id="lab-list-title">Labs</h2>
+        <ol class="lab-index" id="lab-list">
+          {sections.map((section) => (
+            <li>
+              <a href={`/lab/${section.id}`}>
+                <span aria-hidden="true">{section.n}</span>
+                <span>{section.title}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </main>
+
+    <BrandFooter />
+  </body>
+</html>

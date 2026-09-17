@@ -26,14 +26,49 @@
   --lab-ink:    #10151f;
   --lab-line:   #c9d3e2;
 
-  --display: ui-sans-serif, "Segoe UI Variable Display", "Segoe UI",
-             system-ui, "Helvetica Neue", Arial, sans-serif;
+  --display: "Sofia Sans", ui-sans-serif, system-ui, sans-serif;
   --mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono",
           "Roboto Mono", Menlo, Consolas, monospace;
 
   --measure: 62ch;
   --radius: 10px;
   --gutter: clamp(1.25rem, 4vw, 4rem);
+}
+
+@font-face {
+  font-family: "Sofia Sans";
+  src: url("/fonts/SofiaSans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sofia Sans";
+  src: url("/fonts/SofiaSans-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sofia Sans";
+  src: url("/fonts/SofiaSans-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sofia Sans";
+  src: url("/fonts/SofiaSans-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Black Han Sans";
+  src: url("/fonts/BlackHanSans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 /* ---- Reset ------------------------------------------------------------- */
@@ -47,6 +82,10 @@ html {
   color-scheme: dark;
 }
 
+html.snap {
+  scroll-padding-block-start: 3.5rem;
+}
+
 body {
   margin: 0;
   background: var(--ink);
@@ -57,7 +96,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3 { line-height: 1.08; margin: 0; text-wrap: balance; }
+h1, h2, h3 {
+  font-family: var(--display);
+  line-height: 1.08;
+  margin: 0;
+  text-wrap: balance;
+}
 p { margin: 0 0 1rem; max-width: var(--measure); }
 img { max-width: 100%; height: auto; }
 
@@ -123,6 +167,7 @@ img { max-width: 100%; height: auto; }
 /* ---- Hero -------------------------------------------------------------- */
 
 .hero {
+  position: relative;
   min-height: 100vh;
   min-height: 100svh;
   display: grid;
@@ -131,6 +176,28 @@ img { max-width: 100%; height: auto; }
   padding: 6rem var(--gutter) 4rem;
   scroll-snap-align: start;
   border-block-end: 1px solid var(--line);
+}
+
+.hero__bar {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 110;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem 1.5rem;
+  padding: 0.85rem var(--gutter);
+  margin: 0;
+  max-width: none;
+  background: color-mix(in srgb, var(--ink) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border-block-end: 1px solid var(--line);
+}
+.hero__bar a {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--fix);
 }
 
 .hero__kicker {
@@ -287,6 +354,10 @@ img { max-width: 100%; height: auto; }
   align-items: center;
   gap: 0.9rem;
 }
+.switchbar a {
+  color: var(--fix);
+  font-size: 0.9rem;
+}
 
 .switch {
   display: inline-flex;
@@ -425,6 +496,10 @@ img { max-width: 100%; height: auto; }
   background: #ffffff;
   color: var(--lab-ink);
   margin-block-end: 0.5rem;
+}
+.lab-form input:focus::placeholder {
+  color: transparent;
+  opacity: 0;
 }
 .lab-fakelabel { font-weight: 650; font-size: 0.9rem; }
 .lab-hint { font-size: 0.82rem; color: #42526b; margin: 0 0 0.5rem; }
@@ -579,6 +654,36 @@ body:has(.buffer:not([hidden])) { padding-block-end: 32vh; }
 .foot a { color: var(--fix); }
 .foot ul { max-width: var(--measure); }
 
+.brand-foot {
+  padding: 2rem var(--gutter) 3rem;
+  border-block-start: 1px solid var(--line);
+  display: grid;
+  gap: 1.5rem;
+}
+.brand-foot__mark {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: max-content;
+  color: var(--fix);
+  text-decoration: none;
+}
+.brand-foot__mark:hover { color: var(--paper); }
+.brand-foot__name {
+  font-family: "Black Han Sans", var(--display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.brand-foot__copy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+}
+.brand-foot__copy p { margin: 0; max-width: 48ch; }
+.brand-foot__copy a { color: var(--fix); }
+
 /* ---- Scroll snap -------------------------------------------------------
    Only on a viewport tall and wide enough to hold a whole unit. Mandatory
    snapping on a short window (or at 200% zoom) can strand a keyboard user
@@ -607,4 +712,150 @@ body:has(.buffer:not([hidden])) { padding-block-end: 32vh; }
     margin: 0 var(--gutter) 2rem;
   }
   .jump ol { grid-template-columns: 1fr 1fr; }
+}
+
+/* ---- Screen reader labs ------------------------------------------------ */
+
+.lab-page {
+  min-height: 100svh;
+  display: grid;
+  align-content: start;
+}
+
+.lab-page__banner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding: 1.25rem var(--gutter) 0;
+}
+.lab-page__banner p { margin: 0; max-width: none; }
+.lab-page__banner a { color: var(--fix); }
+
+.lab-page__main {
+  padding: 2rem var(--gutter) 2.5rem;
+  display: grid;
+  gap: 1rem;
+  max-width: 52rem;
+}
+.lab-page__main h1 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.lab-page__main .lab { margin-block-start: 0.25rem; }
+.lab-page__main .btn { justify-self: start; }
+
+.lab-page__label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: var(--mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  margin: 0 0 0.45rem;
+}
+
+.lab-editor {
+  display: grid;
+  gap: 0.65rem;
+  margin-block-start: 0.5rem;
+}
+.lab-editor label {
+  font-weight: 650;
+  font-size: 0.9rem;
+}
+.lab-editor__wrap {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--ink-2);
+}
+.lab-editor__highlight,
+.lab-editor__code {
+  box-sizing: border-box;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  tab-size: 2;
+  padding: 0.85rem 0.9rem;
+  margin: 0;
+  white-space: pre;
+  overflow: auto;
+}
+.lab-editor__highlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: var(--paper);
+  scrollbar-width: none;
+}
+.lab-editor__highlight::-webkit-scrollbar {
+  display: none;
+}
+.lab-editor__highlight code {
+  display: block;
+  font: inherit;
+}
+.lab-editor__code {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  min-height: 12rem;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--paper);
+  resize: vertical;
+}
+.lab-editor__code::selection {
+  background: color-mix(in srgb, var(--fix) 40%, transparent);
+  color: transparent;
+}
+.lab-editor__code::-moz-selection {
+  background: color-mix(in srgb, var(--fix) 40%, transparent);
+  color: transparent;
+}
+.lab-editor__tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.lab-page__pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding: 0 var(--gutter) 3rem;
+  max-width: 52rem;
+}
+.lab-page__pager a { color: var(--fix); }
+
+.lab-index {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+.lab-index a {
+  display: grid;
+  grid-template-columns: 2.5ch 1fr;
+  gap: 0.85rem;
+  align-items: baseline;
+  padding: 0.7rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  color: var(--paper);
+  text-decoration: none;
+  background: var(--ink-2);
+}
+.lab-index a:hover { background: var(--ink-3); }
+.lab-index a span:first-child {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--fix);
 }
