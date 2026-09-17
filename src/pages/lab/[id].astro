@@ -2,6 +2,7 @@
 import '../../styles/global.css';
 import { sections } from '../../lib/sections.mjs';
 import { highlightCode } from '../../lib/highlight.mjs';
+import BrandFooter from '../../components/BrandFooter.astro';
 
 export function getStaticPaths() {
   return sections.map((section) => ({
@@ -103,6 +104,8 @@ const failHighlighted = highlightCode(failMarkup);
         <a href="/lab/">Back to all labs</a>
       )}
     </nav>
+
+    <BrandFooter />
 
     <script src="../../scripts/app.js"></script>
     <script src="../../scripts/lab.js"></script>

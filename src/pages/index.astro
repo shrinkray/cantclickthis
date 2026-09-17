@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { sections } from '../lib/sections.mjs';
 import { renderSnippet } from '../lib/highlight.mjs';
+import BrandFooter from '../components/BrandFooter.astro';
 
 const title = 'The 80/20 of Accessibility — Small Fixes, Big Impact';
 const description =
@@ -244,6 +245,8 @@ const transcript: [string, string[]][] = [
         <a href="#top">Back to the top</a>.
       </p>
     </footer>
+
+    <BrandFooter />
 
     <section class="buffer" id="buffer" hidden data-buffer aria-labelledby="buffer-title">
       <div class="buffer__head">
