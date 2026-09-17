@@ -31,6 +31,15 @@ const failHighlighted = highlightCode(failMarkup);
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="color-scheme" content="dark" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={`https://cantclickthis.dev/lab/${section.id}`} />
+    <meta property="og:image" content="https://cantclickthis.dev/social-card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={`https://cantclickthis.dev/lab/${section.id}`} />
   </head>
 
