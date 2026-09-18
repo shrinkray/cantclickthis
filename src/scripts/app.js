@@ -177,7 +177,9 @@ document.querySelectorAll('[data-stage]').forEach((stage) => {
   prepareStage(stage);
   new MutationObserver(() => prepareStage(stage)).observe(stage, {
     childList: true,
-    subtree: true
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['alt', 'tabindex']
   });
 });
 
@@ -235,6 +237,7 @@ function unlabeledDemoInput(target) {
 function wipeDemoPlaceholder(input) {
   if (!input.hasAttribute('placeholder')) return;
   input.dataset.placeholder = input.getAttribute('placeholder') ?? '';
+  input.dataset.hadPlaceholder = 'true';
   input.removeAttribute('placeholder');
 }
 
@@ -260,8 +263,8 @@ document.addEventListener(
 
 document.addEventListener('focusout', (event) => {
   const input = unlabeledDemoInput(event.target);
-  if (!input || input.value || !('placeholder' in input.dataset)) return;
-  input.setAttribute('placeholder', input.dataset.placeholder);
+  if (!input || input.value || input.dataset.hadPlaceholder !== 'true') return;
+  input.setAttribute('placeholder', input.dataset.placeholder ?? '');
 });
 
 document.addEventListener('submit', (event) => {
