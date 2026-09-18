@@ -85,7 +85,7 @@ if (!playground) {
       editor.value = source.fix;
       render(source.fix);
       paintEditor();
-      jumpToTop();
+      editor.focus();
       announce('Example loaded with one possible fix.');
     });
   }
