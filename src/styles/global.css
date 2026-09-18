@@ -199,6 +199,11 @@ img { max-width: 100%; height: auto; }
   font-size: 0.8rem;
   color: var(--fix);
 }
+.hero__bar-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+}
 
 .hero__kicker {
   font-family: var(--mono);
@@ -430,6 +435,14 @@ img { max-width: 100%; height: auto; }
 .lab__dot { inline-size: 0.6rem; block-size: 0.6rem; border-radius: 50%; background: #b9c4d4; flex: none; }
 
 .lab__stage { padding: clamp(1.1rem, 3vw, 2rem); min-height: 15rem; display: grid; align-content: center; }
+.lab-readout {
+  margin: 0;
+  padding: 0.75rem 1.1rem 1.1rem;
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  color: var(--lab-ink);
+  border-block-start: 1px dashed var(--lab-line);
+}
 
 /* Hatch marks the broken state without relying on hue alone. */
 .lab[data-state="fail"] .lab__bar {
@@ -534,6 +547,12 @@ img { max-width: 100%; height: auto; }
 .lab-form input:focus::placeholder {
   color: transparent;
   opacity: 0;
+}
+[data-demo-form] input:not([id])::-webkit-contacts-auto-fill-button,
+[data-demo-form] input:not([id])::-webkit-credentials-auto-fill-button {
+  display: none;
+  visibility: hidden;
+  pointer-events: none;
 }
 .lab-hint { font-size: 0.82rem; color: #42526b; margin: 0 0 0.5rem; }
 .lab-hint--coloronly { color: #c0341a; font-weight: 700; }

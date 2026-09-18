@@ -75,7 +75,7 @@ export const sections = [
     lede: 'Every image gets an alt attribute. What goes inside it depends on whether the image carries information or just decorates.',
     rule: 'If you deleted the image, what sentence would you write in its place? That sentence is your alt text. If you would write nothing, use alt="".',
     criteria: ['WCAG 1.1.1 Non-text Content'],
-    tryIt: 'The filename version is not a missing alt — it is worse. It is noise a screen reader has to read out loud.',
+    tryIt: 'Tab through the example. The line under the image is the alt a screen reader would read — a filename, then decoration.',
     failMarkup: `
 <figure class="lab-figure">
   <img src="/img/sneaker.svg" width="220" height="150" alt="IMG_2847_final_v3.png">
@@ -265,9 +265,9 @@ button:focus-visible {
     criteria: ['WCAG 1.3.1 Info and Relationships', 'WCAG 3.3.2 Labels or Instructions'],
     tryIt: 'Click or Tab into a field. The placeholder vanishes, and nothing is left to say what the field is for. A screen reader announces "edit text" with no name.',
     failMarkup: `
-<form class="lab-form" data-demo-form novalidate>
-  <input type="text" placeholder="Full name">
-  <input type="text" placeholder="you@example.com">
+<form class="lab-form" data-demo-form novalidate autocomplete="off">
+  <input type="text" placeholder="Full name" autocomplete="off">
+  <input type="text" placeholder="Email" autocomplete="off">
   <p class="lab-hint lab-hint--coloronly">* Required</p>
   <button type="submit" class="lab-btn">Sign up</button>
   <p class="lab-status" data-form-status></p>
@@ -286,7 +286,7 @@ button:focus-visible {
     failCode: {
       code: `<input type="text" placeholder="Full name">
 
-<input type="text" placeholder="you@example.com">`,
+<input type="text" placeholder="Email">`,
       notes: [
         { line: 1, text: 'Placeholder is the only instruction, and it disappears the moment you click or Tab in — which is when you need it.' },
         { line: 3, text: 'Nothing is associated with the field, so a screen reader announces "edit text" with no name.' }

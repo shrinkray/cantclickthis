@@ -54,6 +54,7 @@ function setupUnit(unit) {
     });
 
     if (focusWasInside) control.focus();
+    clearImageReadouts();
     refreshHeadingList(unit);
     if (userInitiated) {
       announce(`${title}: ${state === 'fix' ? 'fixed' : 'broken'} version loaded.`);
@@ -71,9 +72,11 @@ function setupUnit(unit) {
 document.querySelectorAll('[data-unit]').forEach(setupUnit);
 
 /* ------------------------------------------------------------------ *
- * Headings are not tab stops on a real page. Screen readers use H or
- * the rotor. This specimen puts the outline in the tab order so a
- * keyboard pass (and the on-screen buffer) can hear the broken levels.
+ * Headings and images are not tab stops on a real page. Screen readers
+ * use H, the rotor, or the virtual cursor. These specimens put the
+ * outline and named images in the tab order so a keyboard pass (and the
+ * on-screen buffer) can hear the broken levels and the bad alt. Empty
+ * alt stays out of the order — that skip is the fix.
  * ------------------------------------------------------------------ */
 
 function enableHeadingStops(root) {
@@ -84,6 +87,68 @@ function enableHeadingStops(root) {
     if (!el.hasAttribute('tabindex')) el.tabIndex = 0;
   });
 }
+
+function enableImageStops(root) {
+  root.querySelectorAll('img').forEach((img) => {
+    if (img.getAttribute('alt') === '') {
+      img.removeAttribute('tabindex');
+      return;
+    }
+    img.tabIndex = 0;
+  });
+}
+
+function prepareStage(root) {
+  enableHeadingStops(root);
+  enableImageStops(root);
+}
+
+function spokenForImage(img) {
+  const alt = img.getAttribute('alt');
+  if (alt === '') return '';
+  if (alt === null) {
+    return 'graphic. No alt — some screen readers will read the filename instead.';
+  }
+  return `${alt}, graphic`;
+}
+
+function imageReadout(lab) {
+  let el = lab.querySelector('[data-img-readout]');
+  if (el) return el;
+  el = document.createElement('p');
+  el.className = 'lab-readout';
+  el.hidden = true;
+  el.setAttribute('aria-hidden', 'true');
+  el.dataset.imgReadout = '';
+  lab.querySelector('[data-stage]')?.insertAdjacentElement('afterend', el);
+  return el;
+}
+
+function clearImageReadouts(keep = null) {
+  document.querySelectorAll('[data-img-readout]').forEach((el) => {
+    if (el === keep) return;
+    el.hidden = true;
+    el.textContent = '';
+  });
+}
+
+document.addEventListener('focusin', (event) => {
+  const img = event.target;
+  if (!(img instanceof HTMLImageElement) || !img.closest('[data-stage]')) {
+    clearImageReadouts();
+    return;
+  }
+  const lab = img.closest('.lab');
+  const spoken = spokenForImage(img);
+  if (!lab || !spoken) {
+    clearImageReadouts();
+    return;
+  }
+  const readout = imageReadout(lab);
+  clearImageReadouts(readout);
+  readout.textContent = spoken;
+  readout.hidden = false;
+});
 
 function specimenHeadings(unit) {
   return [...unit.querySelectorAll('[data-stage] :is(h1, h2, h3, h4, h5, h6)')];
@@ -109,10 +174,12 @@ function refreshHeadingList(unit) {
 }
 
 document.querySelectorAll('[data-stage]').forEach((stage) => {
-  enableHeadingStops(stage);
-  new MutationObserver(() => enableHeadingStops(stage)).observe(stage, {
+  prepareStage(stage);
+  new MutationObserver(() => prepareStage(stage)).observe(stage, {
     childList: true,
-    subtree: true
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['alt', 'tabindex']
   });
 });
 
@@ -153,6 +220,51 @@ document.addEventListener('click', (event) => {
     const count = fillHeadingList(unit);
     announce(`Headings list generated. ${count} headings.`);
   }
+});
+
+/* Windows Chrome treats an email-shaped placeholder as Autofill fodder
+ * and pops a tooltip with a saved (or sample) address — which names the
+ * field the moment the placeholder disappears. Drop the attribute on the
+ * way in so the broken specimen stays an unlabeled box. The fixed form
+ * keeps autocomplete; that is a WCAG 1.3.5 win. */
+function unlabeledDemoInput(target) {
+  if (!(target instanceof HTMLInputElement)) return null;
+  if (!target.closest('[data-demo-form]')) return null;
+  if (target.labels?.length) return null;
+  return target;
+}
+
+function wipeDemoPlaceholder(input) {
+  if (!input.hasAttribute('placeholder')) return;
+  input.dataset.placeholder = input.getAttribute('placeholder') ?? '';
+  input.dataset.hadPlaceholder = 'true';
+  input.removeAttribute('placeholder');
+}
+
+document.addEventListener(
+  'pointerdown',
+  (event) => {
+    const input = unlabeledDemoInput(event.target);
+    if (input) wipeDemoPlaceholder(input);
+  },
+  true
+);
+
+document.addEventListener(
+  'focusin',
+  (event) => {
+    const input = unlabeledDemoInput(event.target);
+    if (!input) return;
+    input.setAttribute('autocomplete', 'off');
+    wipeDemoPlaceholder(input);
+  },
+  true
+);
+
+document.addEventListener('focusout', (event) => {
+  const input = unlabeledDemoInput(event.target);
+  if (!input || input.value || input.dataset.hadPlaceholder !== 'true') return;
+  input.setAttribute('placeholder', input.dataset.placeholder ?? '');
 });
 
 document.addEventListener('submit', (event) => {
