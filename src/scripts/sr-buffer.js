@@ -137,6 +137,25 @@ function warningsOf(el) {
   if (tag === 'img' && el.getAttribute('alt') === null) {
     warnings.push('No alt attribute. Some screen readers will read the filename instead.');
   }
+  if (el.classList.contains('lab-fakehead')) {
+    warnings.push('Looks like a heading, announced as plain text. It will not appear in a headings list.');
+  }
+  if (/^h[1-6]$/.test(tag)) {
+    const stage = el.closest('[data-stage]');
+    if (stage) {
+      const headings = [...stage.querySelectorAll('h1, h2, h3, h4, h5, h6')];
+      const index = headings.indexOf(el);
+      const current = Number(tag[1]);
+      if (index === 0 && current > 2) {
+        warnings.push(`First heading in this example is level ${current}. Start at 1 or 2, then go down one step at a time.`);
+      } else if (index > 0) {
+        const previous = Number(headings[index - 1].tagName[1]);
+        if (current > previous + 1) {
+          warnings.push(`Skipped heading level. Previous was ${previous}, this is ${current}.`);
+        }
+      }
+    }
+  }
   return warnings;
 }
 

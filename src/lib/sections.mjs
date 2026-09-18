@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * The five anti-patterns, in talk order.
+ * The six anti-patterns, in talk order.
  *
  * `failMarkup` / `fixMarkup` are injected into <template> elements and cloned
  * into the live DOM on toggle, so the accessibility tree really changes —
@@ -111,8 +111,62 @@ export const sections = [
   },
 
   {
-    id: 'focus-visible',
+    id: 'heading-levels',
     n: '03',
+    title: 'Levels of heading',
+    lede: 'Nearly 30 million headings on a million home pages — 29.9 each, up 20.4% in a year. More headings only help if the outline is true.',
+    rule: 'Headings are the map, not the type scale. If it looks like a heading, it has to be a heading, at the next level down — never the one that happens to look the right size.',
+    criteria: ['WCAG 1.3.1 Info and Relationships', 'WCAG 2.4.6 Headings and Labels'],
+    tryIt: 'Tab through the example. The fake title is skipped — it is a paragraph. Then the outline jumps 4, 6, 3. A screen reader headings list (VoiceOver rotor, NVDA Insert+F7) shows the same gaps.',
+    failMarkup: `
+<div class="lab-outline" data-headingsource>
+  <p class="lab-fakehead">DevFest 2026</p>
+  <h4>Schedule</h4>
+  <p>Friday talks, Saturday workshops.</p>
+  <h6>Venue</h6>
+  <p>City library, main hall. <a href="#heading-levels">Get directions</a></p>
+  <h3>Get tickets</h3>
+  <p><a href="#heading-levels">Register for DevFest</a></p>
+</div>`,
+    fixMarkup: `
+<div class="lab-outline" data-headingsource>
+  <h2>DevFest 2026</h2>
+  <h3>Schedule</h3>
+  <p>Friday talks, Saturday workshops.</p>
+  <h3>Venue</h3>
+  <p>City library, main hall. <a href="#heading-levels">Get directions</a></p>
+  <h3>Get tickets</h3>
+  <p><a href="#heading-levels">Register for DevFest</a></p>
+</div>`,
+    failCode: {
+      code: `<p class="hero">DevFest 2026</p>
+
+<h4>Schedule</h4>
+
+<h6>Venue</h6>
+
+<h3>Get tickets</h3>`,
+      notes: [
+        { line: 1, text: 'Looks like the page title. The headings list never sees it — it is a paragraph.' },
+        { line: 3, text: 'h4 because it looked medium-small. Nothing sits above it, so the outline skips two levels.' },
+        { line: 5, text: 'h6 as a size token. Almost every home page that uses one also skips levels — this is type size, not a sixth level of structure.' }
+      ]
+    },
+    fixCode: {
+      code: `<h2>DevFest 2026</h2>
+<h3>Schedule</h3>
+<h3>Venue</h3>
+<h3>Get tickets</h3>`,
+      notes: [
+        { line: 1, text: 'A real heading. Screen reader users jump here first, the way sighted users look at the big type.' },
+        { line: 2, text: 'Siblings share a level. Do not pick h4 or h6 because they look smaller — that is CSS, not structure.' }
+      ]
+    }
+  },
+
+  {
+    id: 'focus-visible',
+    n: '04',
     title: 'The invisible cursor',
     lede: 'Someone removed the focus outline because it looked ugly on one button. Now nobody navigating by keyboard can tell where they are.',
     rule: 'Never remove a focus outline without replacing it with something at least as visible. If you cannot see where you are, neither can the person using only a keyboard.',
@@ -160,7 +214,7 @@ button:focus-visible {
 
   {
     id: 'link-text',
-    n: '04',
+    n: '05',
     title: 'Click here, click here, click here',
     lede: 'Screen reader users pull up a list of every link on the page to navigate it. Out of context, most link text collapses into noise.',
     rule: 'Link text has to make sense with the sentence around it removed. Read the links on their own — if you cannot tell them apart, neither can anyone else.',
@@ -204,17 +258,15 @@ button:focus-visible {
 
   {
     id: 'form-labels',
-    n: '05',
+    n: '06',
     title: 'A form with no labels',
     lede: 'Placeholder text looks like a label until you start typing and it vanishes — taking the only instruction with it.',
     rule: 'Every input needs a real label a screen reader can announce. Placeholder text is a hint, not a label, and it disappears the moment it is needed.',
     criteria: ['WCAG 1.3.1 Info and Relationships', 'WCAG 3.3.2 Labels or Instructions'],
-    tryIt: 'Tab into each field. The broken version announces "edit text" three times with no way to tell them apart.',
+    tryIt: 'Click or Tab into a field. The placeholder vanishes, and nothing is left to say what the field is for. A screen reader announces "edit text" with no name.',
     failMarkup: `
 <form class="lab-form" data-demo-form novalidate>
-  <div class="lab-fakelabel">Full name</div>
   <input type="text" placeholder="Full name">
-  <div class="lab-fakelabel">Email</div>
   <input type="text" placeholder="you@example.com">
   <p class="lab-hint lab-hint--coloronly">* Required</p>
   <button type="submit" class="lab-btn">Sign up</button>
@@ -232,14 +284,12 @@ button:focus-visible {
   <p class="lab-status" data-form-status role="status"></p>
 </form>`,
     failCode: {
-      code: `<div class="label">Email</div>
-<input type="text" placeholder="you@example.com">
+      code: `<input type="text" placeholder="Full name">
 
-<p class="hint">* Required</p>`,
+<input type="text" placeholder="you@example.com">`,
       notes: [
-        { line: 1, text: 'A styled div is not a label. Nothing connects it to the input, so it is never announced with the field.' },
-        { line: 2, text: 'Placeholder-only fields announce as "edit text" and the hint disappears as soon as typing starts.' },
-        { line: 4, text: 'Required is signalled by a red asterisk alone — colour carrying meaning on its own fails 1.4.1.' }
+        { line: 1, text: 'Placeholder is the only instruction, and it disappears the moment you click or Tab in — which is when you need it.' },
+        { line: 3, text: 'Nothing is associated with the field, so a screen reader announces "edit text" with no name.' }
       ]
     },
     fixCode: {

@@ -54,6 +54,7 @@ function setupUnit(unit) {
     });
 
     if (focusWasInside) control.focus();
+    refreshHeadingList(unit);
     if (userInitiated) {
       announce(`${title}: ${state === 'fix' ? 'fixed' : 'broken'} version loaded.`);
     }
@@ -68,6 +69,52 @@ function setupUnit(unit) {
 }
 
 document.querySelectorAll('[data-unit]').forEach(setupUnit);
+
+/* ------------------------------------------------------------------ *
+ * Headings are not tab stops on a real page. Screen readers use H or
+ * the rotor. This specimen puts the outline in the tab order so a
+ * keyboard pass (and the on-screen buffer) can hear the broken levels.
+ * ------------------------------------------------------------------ */
+
+function enableHeadingStops(root) {
+  root.querySelectorAll('.lab-fakehead[tabindex]').forEach((el) => {
+    el.removeAttribute('tabindex');
+  });
+  root.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((el) => {
+    if (!el.hasAttribute('tabindex')) el.tabIndex = 0;
+  });
+}
+
+function specimenHeadings(unit) {
+  return [...unit.querySelectorAll('[data-stage] :is(h1, h2, h3, h4, h5, h6)')];
+}
+
+function fillHeadingList(unit) {
+  const panel = unit.querySelector('[data-headinglist-out]');
+  if (!panel) return 0;
+  const headings = specimenHeadings(unit);
+  const items = headings
+    .map((heading) => {
+      const level = heading.tagName.slice(1);
+      return `<li>Heading ${level}: ${heading.textContent.trim()}</li>`;
+    })
+    .join('');
+  panel.innerHTML = `<p>Headings on this page (${headings.length})</p><ol>${items}</ol>`;
+  return headings.length;
+}
+
+function refreshHeadingList(unit) {
+  const panel = unit.querySelector('[data-headinglist-out]');
+  if (panel?.childElementCount) fillHeadingList(unit);
+}
+
+document.querySelectorAll('[data-stage]').forEach((stage) => {
+  enableHeadingStops(stage);
+  new MutationObserver(() => enableHeadingStops(stage)).observe(stage, {
+    childList: true,
+    subtree: true
+  });
+});
 
 /* ------------------------------------------------------------------ *
  * 2. Demo component behaviour (event delegation)
@@ -98,6 +145,13 @@ document.addEventListener('click', (event) => {
       .join('');
     panel.innerHTML = `<p>Links on this page (${links.length})</p><ol>${items}</ol>`;
     announce(`Links list generated. ${links.length} links.`);
+  }
+
+  if (trigger.dataset.action === 'headinglist') {
+    const unit = trigger.closest('[data-unit]');
+    if (!unit) return;
+    const count = fillHeadingList(unit);
+    announce(`Headings list generated. ${count} headings.`);
   }
 });
 

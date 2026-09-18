@@ -56,6 +56,16 @@ if (!playground) {
     stage.innerHTML = html;
   }
 
+  function jumpToTop() {
+    window.scrollTo(0, 0);
+    playground.focus({ preventScroll: true });
+  }
+
+  playground.querySelector('[data-jump-top]')?.addEventListener('click', () => {
+    jumpToTop();
+    announce('Back at the top of the page.');
+  });
+
   if (stage && editor && source) {
     editor.addEventListener('input', () => {
       render(editor.value);
