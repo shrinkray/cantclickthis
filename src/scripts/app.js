@@ -54,6 +54,7 @@ function setupUnit(unit) {
     });
 
     if (focusWasInside) control.focus();
+    clearImageReadouts();
     refreshHeadingList(unit);
     if (userInitiated) {
       announce(`${title}: ${state === 'fix' ? 'fixed' : 'broken'} version loaded.`);
@@ -101,6 +102,50 @@ function prepareStage(root) {
   enableHeadingStops(root);
   enableImageStops(root);
 }
+
+function spokenForImage(img) {
+  const alt = img.getAttribute('alt');
+  if (alt === '') return '';
+  return [alt, 'graphic'].filter(Boolean).join(', ');
+}
+
+function imageReadout(lab) {
+  let el = lab.querySelector('[data-img-readout]');
+  if (el) return el;
+  el = document.createElement('p');
+  el.className = 'lab-readout';
+  el.hidden = true;
+  el.setAttribute('aria-hidden', 'true');
+  el.dataset.imgReadout = '';
+  lab.querySelector('[data-stage]')?.insertAdjacentElement('afterend', el);
+  return el;
+}
+
+function clearImageReadouts(keep = null) {
+  document.querySelectorAll('[data-img-readout]').forEach((el) => {
+    if (el === keep) return;
+    el.hidden = true;
+    el.textContent = '';
+  });
+}
+
+document.addEventListener('focusin', (event) => {
+  const img = event.target;
+  if (!(img instanceof HTMLImageElement) || !img.closest('[data-stage]')) {
+    clearImageReadouts();
+    return;
+  }
+  const lab = img.closest('.lab');
+  const spoken = spokenForImage(img);
+  if (!lab || !spoken) {
+    clearImageReadouts();
+    return;
+  }
+  const readout = imageReadout(lab);
+  clearImageReadouts(readout);
+  readout.textContent = spoken;
+  readout.hidden = false;
+});
 
 function specimenHeadings(unit) {
   return [...unit.querySelectorAll('[data-stage] :is(h1, h2, h3, h4, h5, h6)')];

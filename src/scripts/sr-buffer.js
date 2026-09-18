@@ -137,6 +137,9 @@ function warningsOf(el) {
   if (tag === 'img' && el.getAttribute('alt') === null) {
     warnings.push('No alt attribute. Some screen readers will read the filename instead.');
   }
+  if (tag === 'img' && /\.(png|jpe?g|gif|webp|svg)$/i.test(el.getAttribute('alt') || '')) {
+    warnings.push('Filename used as alt. A screen reader will read the export name out loud.');
+  }
   if (el.classList.contains('lab-fakehead')) {
     warnings.push('Looks like a heading, announced as plain text. It will not appear in a headings list.');
   }
