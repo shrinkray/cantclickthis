@@ -155,6 +155,50 @@ document.addEventListener('click', (event) => {
   }
 });
 
+/* Windows Chrome treats an email-shaped placeholder as Autofill fodder
+ * and pops a tooltip with a saved (or sample) address — which names the
+ * field the moment the placeholder disappears. Drop the attribute on the
+ * way in so the broken specimen stays an unlabeled box. The fixed form
+ * keeps autocomplete; that is a WCAG 1.3.5 win. */
+function unlabeledDemoInput(target) {
+  if (!(target instanceof HTMLInputElement)) return null;
+  const form = target.closest('[data-demo-form]');
+  if (!form || form.querySelector('label[for]')) return null;
+  return target;
+}
+
+function wipeDemoPlaceholder(input) {
+  if (!input.hasAttribute('placeholder')) return;
+  input.dataset.placeholder = input.getAttribute('placeholder') ?? '';
+  input.removeAttribute('placeholder');
+}
+
+document.addEventListener(
+  'pointerdown',
+  (event) => {
+    const input = unlabeledDemoInput(event.target);
+    if (input) wipeDemoPlaceholder(input);
+  },
+  true
+);
+
+document.addEventListener(
+  'focusin',
+  (event) => {
+    const input = unlabeledDemoInput(event.target);
+    if (!input) return;
+    input.setAttribute('autocomplete', 'off');
+    wipeDemoPlaceholder(input);
+  },
+  true
+);
+
+document.addEventListener('focusout', (event) => {
+  const input = unlabeledDemoInput(event.target);
+  if (!input || input.value || !input.dataset.placeholder) return;
+  input.setAttribute('placeholder', input.dataset.placeholder);
+});
+
 document.addEventListener('submit', (event) => {
   const form = event.target.closest('[data-demo-form]');
   if (!form) return;
