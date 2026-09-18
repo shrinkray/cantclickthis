@@ -535,7 +535,6 @@ img { max-width: 100%; height: auto; }
   color: transparent;
   opacity: 0;
 }
-.lab-fakelabel { font-weight: 650; font-size: 0.9rem; }
 .lab-hint { font-size: 0.82rem; color: #42526b; margin: 0 0 0.5rem; }
 .lab-hint--coloronly { color: #c0341a; font-weight: 700; }
 .lab-status { font-size: 0.9rem; font-weight: 650; margin: 0.5rem 0 0; min-height: 1.4em; }
