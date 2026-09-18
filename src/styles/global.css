@@ -540,8 +540,8 @@ img { max-width: 100%; height: auto; }
   color: transparent;
   opacity: 0;
 }
-[data-demo-form]:not(:has(label[for])) input::-webkit-contacts-auto-fill-button,
-[data-demo-form]:not(:has(label[for])) input::-webkit-credentials-auto-fill-button {
+[data-demo-form] input:not([id])::-webkit-contacts-auto-fill-button,
+[data-demo-form] input:not([id])::-webkit-credentials-auto-fill-button {
   display: none;
   visibility: hidden;
   pointer-events: none;

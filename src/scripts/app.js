@@ -162,8 +162,8 @@ document.addEventListener('click', (event) => {
  * keeps autocomplete; that is a WCAG 1.3.5 win. */
 function unlabeledDemoInput(target) {
   if (!(target instanceof HTMLInputElement)) return null;
-  const form = target.closest('[data-demo-form]');
-  if (!form || form.querySelector('label[for]')) return null;
+  if (!target.closest('[data-demo-form]')) return null;
+  if (target.labels?.length) return null;
   return target;
 }
 
@@ -195,7 +195,7 @@ document.addEventListener(
 
 document.addEventListener('focusout', (event) => {
   const input = unlabeledDemoInput(event.target);
-  if (!input || input.value || !input.dataset.placeholder) return;
+  if (!input || input.value || !('placeholder' in input.dataset)) return;
   input.setAttribute('placeholder', input.dataset.placeholder);
 });
 
