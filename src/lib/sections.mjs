@@ -117,7 +117,7 @@ export const sections = [
     lede: 'Nearly 30 million headings on a million home pages — 29.9 each, up 20.4% in a year. More headings only help if the outline is true.',
     rule: 'Headings are the map, not the type scale. If it looks like a heading, it has to be a heading, at the next level down — never the one that happens to look the right size.',
     criteria: ['WCAG 1.3.1 Info and Relationships', 'WCAG 2.4.6 Headings and Labels'],
-    tryIt: 'Tab through the example. The broken version lands on a title that is not a heading, then jumps 4, 6, 3. A screen reader headings list (VoiceOver rotor, NVDA Insert+F7) shows the same gaps.',
+    tryIt: 'Tab through the example. The fake title is skipped — it is a paragraph. Then the outline jumps 4, 6, 3. A screen reader headings list (VoiceOver rotor, NVDA Insert+F7) shows the same gaps.',
     failMarkup: `
 <div class="lab-outline" data-headingsource>
   <p class="lab-fakehead">DevFest 2026</p>

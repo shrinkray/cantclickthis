@@ -77,7 +77,10 @@ document.querySelectorAll('[data-unit]').forEach(setupUnit);
  * ------------------------------------------------------------------ */
 
 function enableHeadingStops(root) {
-  root.querySelectorAll('h1, h2, h3, h4, h5, h6, .lab-fakehead').forEach((el) => {
+  root.querySelectorAll('.lab-fakehead[tabindex]').forEach((el) => {
+    el.removeAttribute('tabindex');
+  });
+  root.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((el) => {
     if (!el.hasAttribute('tabindex')) el.tabIndex = 0;
   });
 }
