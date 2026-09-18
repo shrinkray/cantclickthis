@@ -1,7 +1,7 @@
 # cantclickthis.dev
 
 Live demo site for the talk *The 80/20 of Accessibility — Small Fixes, Big Impact*
-(Greg Miller, Shrinkray Interactive). Static Astro site, five interactive
+(Greg Miller, Shrinkray Interactive). Static Astro site, six interactive
 fail/fix accessibility comparisons, a hero track with a transcript, and a screen-reader
 buffer panel for the room to watch live.
 

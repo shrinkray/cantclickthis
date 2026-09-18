@@ -70,6 +70,28 @@ function setupUnit(unit) {
 document.querySelectorAll('[data-unit]').forEach(setupUnit);
 
 /* ------------------------------------------------------------------ *
+ * Headings are not tab stops on a real page. Screen readers use H or
+ * the rotor. This specimen puts the outline in the tab order so a
+ * keyboard pass (and the on-screen buffer) can hear the broken levels.
+ * ------------------------------------------------------------------ */
+
+function enableHeadingStops(root) {
+  root
+    .querySelectorAll('[data-headingsource] :is(h1, h2, h3, h4, h5, h6), [data-headingsource] .lab-fakehead')
+    .forEach((el) => {
+      if (!el.hasAttribute('tabindex')) el.tabIndex = 0;
+    });
+}
+
+document.querySelectorAll('[data-stage]').forEach((stage) => {
+  enableHeadingStops(stage);
+  new MutationObserver(() => enableHeadingStops(stage)).observe(stage, {
+    childList: true,
+    subtree: true
+  });
+});
+
+/* ------------------------------------------------------------------ *
  * 2. Demo component behaviour (event delegation)
  *
  * One click listener serves both states. The broken div gets its click
@@ -98,6 +120,21 @@ document.addEventListener('click', (event) => {
       .join('');
     panel.innerHTML = `<p>Links on this page (${links.length})</p><ol>${items}</ol>`;
     announce(`Links list generated. ${links.length} links.`);
+  }
+
+  if (trigger.dataset.action === 'headinglist') {
+    const unit = trigger.closest('[data-unit]');
+    const panel = unit?.querySelector('[data-headinglist-out]');
+    if (!unit || !panel) return;
+    const headings = [...unit.querySelectorAll('[data-headingsource] :is(h1, h2, h3, h4, h5, h6)')];
+    const items = headings
+      .map((heading) => {
+        const level = heading.tagName.slice(1);
+        return `<li>Heading ${level}: ${heading.textContent.trim()}</li>`;
+      })
+      .join('');
+    panel.innerHTML = `<p>Headings on this page (${headings.length})</p><ol>${items}</ol>`;
+    announce(`Headings list generated. ${headings.length} headings.`);
   }
 });
 

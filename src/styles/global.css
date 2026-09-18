@@ -118,7 +118,7 @@ img { max-width: 100%; height: auto; }
   box-shadow: 0 0 0 6px var(--ink);
 }
 
-.lab :where(a, button, input, select, textarea):focus-visible {
+.lab :where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline-color: var(--lab-ink);
   box-shadow: 0 0 0 6px #ffffff;
 }
@@ -472,8 +472,8 @@ img { max-width: 100%; height: auto; }
 .lab-nav { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: center; }
 .lab-nav a { color: #10151f; font-weight: 600; }
 
-/* The point of section 03: this rule kills the indicator and puts nothing
-   in its place. Scoped to the broken demo so it cannot leak out. */
+/* The point of the invisible-cursor demo: this rule kills the indicator
+   and puts nothing in its place. Scoped to the broken demo so it cannot leak. */
 .lab-nav--noring a:focus,
 .lab-nav--noring a:focus-visible,
 .lab-nav--noring button:focus,
@@ -484,6 +484,40 @@ img { max-width: 100%; height: auto; }
 
 .lab-prose p { margin: 0 0 0.75rem; }
 .lab-prose a { color: #0a4a8f; }
+
+.lab-outline {
+  display: grid;
+  justify-items: start;
+  max-width: 36rem;
+}
+.lab-outline h2,
+.lab-fakehead {
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 0.45rem;
+}
+.lab-fakehead { font-family: inherit; }
+.lab-outline h3 {
+  font-size: 1.12rem;
+  font-weight: 700;
+  margin: 0.55rem 0 0.2rem;
+}
+.lab-outline h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0.55rem 0 0.2rem;
+}
+.lab-outline h6 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #42526b;
+  margin: 0.55rem 0 0.2rem;
+}
+.lab-outline p { margin: 0 0 0.45rem; }
+.lab-outline a { color: #0a4a8f; }
 
 .lab-form { display: grid; gap: 0.4rem; justify-items: start; max-width: 24rem; }
 .lab-form label { font-weight: 650; font-size: 0.9rem; }
@@ -512,9 +546,11 @@ img { max-width: 100%; height: auto; }
   border-radius: 8px;
   padding: 0.75rem 0.9rem;
   background: #ffffff;
+  color: var(--lab-ink);
   font-family: var(--mono);
   font-size: 0.85rem;
 }
+.linklist:empty { display: none; }
 .linklist ol { margin: 0.4rem 0 0; padding-inline-start: 1.4rem; }
 .linklist p { margin: 0; font-weight: 700; }
 

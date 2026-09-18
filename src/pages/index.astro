@@ -6,7 +6,7 @@ import BrandFooter from '../components/BrandFooter.astro';
 
 const title = 'The 80/20 of Accessibility — Small Fixes, Big Impact';
 const description =
-  'Five accessibility failures you can fix today, each shown broken and fixed side by side, with the markup that makes the difference.';
+  'Six accessibility failures you can fix today, each shown broken and fixed side by side, with the markup that makes the difference.';
 
 // Highlighting happens here, at build time. The browser gets static HTML.
 const units = sections.map((section) => ({
@@ -14,6 +14,7 @@ const units = sections.map((section) => ({
   failHighlighted: renderSnippet(section.failCode),
   fixHighlighted: renderSnippet(section.fixCode)
 }));
+const total = String(units.length).padStart(2, '0');
 
 const transcript: [string, string[]][] = [
   ["Intro", [
@@ -93,7 +94,7 @@ const transcript: [string, string[]][] = [
     <header class="hero" id="top">
       <h1 class="hero__title">You can't click this</h1>
       <p class="hero__sub">
-        Five ways websites lock people out, each one live and broken on this page —
+        Six ways websites lock people out, each one live and broken on this page —
         then fixed, in the same breath, with the markup that did it.
       </p>
 
@@ -156,7 +157,7 @@ const transcript: [string, string[]][] = [
           tabindex="-1"
         >
           <div class="unit__head">
-            <p class="unit__n">{unit.n} of 05</p>
+            <p class="unit__n">{unit.n} of {total}</p>
             <h2 class="unit__title" id={`${unit.id}-title`} data-unit-title>{unit.title}</h2>
             <p class="unit__lede">{unit.lede}</p>
             <ul class="criteria">
@@ -188,6 +189,15 @@ const transcript: [string, string[]][] = [
               </div>
 
               <p class="lab__try">{unit.tryIt}</p>
+
+              {unit.id === 'heading-levels' && (
+                <>
+                  <button type="button" class="btn" data-action="headinglist">
+                    List every heading, the way a screen reader would
+                  </button>
+                  <div class="linklist" data-headinglist-out aria-live="polite"></div>
+                </>
+              )}
 
               {unit.id === 'link-text' && (
                 <>
@@ -235,7 +245,7 @@ const transcript: [string, string[]][] = [
     <footer class="foot">
       <h2>Twenty percent of the effort, eighty percent of the pain</h2>
       <p>
-        Nothing on this page is advanced. Five patterns cover most of what breaks on a
+        Nothing on this page is advanced. Six patterns cover most of what breaks on a
         real site, and every fix is shorter than the thing it replaces.
       </p>
       <ul>

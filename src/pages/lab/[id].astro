@@ -12,6 +12,7 @@ export function getStaticPaths() {
 }
 
 const { section } = Astro.props;
+const total = String(sections.length).padStart(2, '0');
 const index = sections.findIndex((item) => item.id === section.id);
 const prev = index > 0 ? sections[index - 1] : null;
 const next = index < sections.length - 1 ? sections[index + 1] : null;
@@ -49,7 +50,7 @@ const failHighlighted = highlightCode(failMarkup);
     <p class="vh" role="status" aria-live="polite" data-announce></p>
 
     <header class="lab-page__banner">
-      <p class="hero__kicker">Screen reader lab {section.n} of 05</p>
+      <p class="hero__kicker">Screen reader lab {section.n} of {total}</p>
       <p>
         <a href="/lab/">All screen reader labs</a>
         <span aria-hidden="true"> · </span>
