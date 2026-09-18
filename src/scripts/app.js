@@ -54,6 +54,7 @@ function setupUnit(unit) {
     });
 
     if (focusWasInside) control.focus();
+    refreshHeadingList(unit);
     if (userInitiated) {
       announce(`${title}: ${state === 'fix' ? 'fixed' : 'broken'} version loaded.`);
     }
@@ -76,11 +77,32 @@ document.querySelectorAll('[data-unit]').forEach(setupUnit);
  * ------------------------------------------------------------------ */
 
 function enableHeadingStops(root) {
-  root
-    .querySelectorAll('[data-headingsource] :is(h1, h2, h3, h4, h5, h6), [data-headingsource] .lab-fakehead')
-    .forEach((el) => {
-      if (!el.hasAttribute('tabindex')) el.tabIndex = 0;
-    });
+  root.querySelectorAll('h1, h2, h3, h4, h5, h6, .lab-fakehead').forEach((el) => {
+    if (!el.hasAttribute('tabindex')) el.tabIndex = 0;
+  });
+}
+
+function specimenHeadings(unit) {
+  return [...unit.querySelectorAll('[data-stage] :is(h1, h2, h3, h4, h5, h6)')];
+}
+
+function fillHeadingList(unit) {
+  const panel = unit.querySelector('[data-headinglist-out]');
+  if (!panel) return 0;
+  const headings = specimenHeadings(unit);
+  const items = headings
+    .map((heading) => {
+      const level = heading.tagName.slice(1);
+      return `<li>Heading ${level}: ${heading.textContent.trim()}</li>`;
+    })
+    .join('');
+  panel.innerHTML = `<p>Headings on this page (${headings.length})</p><ol>${items}</ol>`;
+  return headings.length;
+}
+
+function refreshHeadingList(unit) {
+  const panel = unit.querySelector('[data-headinglist-out]');
+  if (panel?.childElementCount) fillHeadingList(unit);
 }
 
 document.querySelectorAll('[data-stage]').forEach((stage) => {
@@ -124,17 +146,9 @@ document.addEventListener('click', (event) => {
 
   if (trigger.dataset.action === 'headinglist') {
     const unit = trigger.closest('[data-unit]');
-    const panel = unit?.querySelector('[data-headinglist-out]');
-    if (!unit || !panel) return;
-    const headings = [...unit.querySelectorAll('[data-headingsource] :is(h1, h2, h3, h4, h5, h6)')];
-    const items = headings
-      .map((heading) => {
-        const level = heading.tagName.slice(1);
-        return `<li>Heading ${level}: ${heading.textContent.trim()}</li>`;
-      })
-      .join('');
-    panel.innerHTML = `<p>Headings on this page (${headings.length})</p><ol>${items}</ol>`;
-    announce(`Headings list generated. ${headings.length} headings.`);
+    if (!unit) return;
+    const count = fillHeadingList(unit);
+    announce(`Headings list generated. ${count} headings.`);
   }
 });
 
