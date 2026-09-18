@@ -94,7 +94,7 @@ function enableImageStops(root) {
       img.removeAttribute('tabindex');
       return;
     }
-    if (!img.hasAttribute('tabindex')) img.tabIndex = 0;
+    img.tabIndex = 0;
   });
 }
 
@@ -106,7 +106,10 @@ function prepareStage(root) {
 function spokenForImage(img) {
   const alt = img.getAttribute('alt');
   if (alt === '') return '';
-  return [alt, 'graphic'].filter(Boolean).join(', ');
+  if (alt === null) {
+    return 'graphic. No alt — some screen readers will read the filename instead.';
+  }
+  return `${alt}, graphic`;
 }
 
 function imageReadout(lab) {
