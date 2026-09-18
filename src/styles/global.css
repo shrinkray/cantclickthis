@@ -199,6 +199,11 @@ img { max-width: 100%; height: auto; }
   font-size: 0.8rem;
   color: var(--fix);
 }
+.hero__bar-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+}
 
 .hero__kicker {
   font-family: var(--mono);
