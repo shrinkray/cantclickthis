@@ -71,9 +71,11 @@ function setupUnit(unit) {
 document.querySelectorAll('[data-unit]').forEach(setupUnit);
 
 /* ------------------------------------------------------------------ *
- * Headings are not tab stops on a real page. Screen readers use H or
- * the rotor. This specimen puts the outline in the tab order so a
- * keyboard pass (and the on-screen buffer) can hear the broken levels.
+ * Headings and images are not tab stops on a real page. Screen readers
+ * use H, the rotor, or the virtual cursor. These specimens put the
+ * outline and named images in the tab order so a keyboard pass (and the
+ * on-screen buffer) can hear the broken levels and the bad alt. Empty
+ * alt stays out of the order — that skip is the fix.
  * ------------------------------------------------------------------ */
 
 function enableHeadingStops(root) {
@@ -83,6 +85,21 @@ function enableHeadingStops(root) {
   root.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((el) => {
     if (!el.hasAttribute('tabindex')) el.tabIndex = 0;
   });
+}
+
+function enableImageStops(root) {
+  root.querySelectorAll('img').forEach((img) => {
+    if (img.getAttribute('alt') === '') {
+      img.removeAttribute('tabindex');
+      return;
+    }
+    if (!img.hasAttribute('tabindex')) img.tabIndex = 0;
+  });
+}
+
+function prepareStage(root) {
+  enableHeadingStops(root);
+  enableImageStops(root);
 }
 
 function specimenHeadings(unit) {
@@ -109,8 +126,8 @@ function refreshHeadingList(unit) {
 }
 
 document.querySelectorAll('[data-stage]').forEach((stage) => {
-  enableHeadingStops(stage);
-  new MutationObserver(() => enableHeadingStops(stage)).observe(stage, {
+  prepareStage(stage);
+  new MutationObserver(() => prepareStage(stage)).observe(stage, {
     childList: true,
     subtree: true
   });

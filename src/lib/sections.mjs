@@ -75,7 +75,7 @@ export const sections = [
     lede: 'Every image gets an alt attribute. What goes inside it depends on whether the image carries information or just decorates.',
     rule: 'If you deleted the image, what sentence would you write in its place? That sentence is your alt text. If you would write nothing, use alt="".',
     criteria: ['WCAG 1.1.1 Non-text Content'],
-    tryIt: 'The filename version is not a missing alt — it is worse. It is noise a screen reader has to read out loud.',
+    tryIt: 'Tab through the example. The sneaker is announced as a filename. The divider is announced as decoration. Both are noise a screen reader has to read out loud.',
     failMarkup: `
 <figure class="lab-figure">
   <img src="/img/sneaker.svg" width="220" height="150" alt="IMG_2847_final_v3.png">
