@@ -56,6 +56,11 @@ if (!playground) {
     stage.innerHTML = html;
   }
 
+  function jumpToTop() {
+    window.scrollTo(0, 0);
+    playground.focus({ preventScroll: true });
+  }
+
   if (stage && editor && source) {
     editor.addEventListener('input', () => {
       render(editor.value);
@@ -75,7 +80,7 @@ if (!playground) {
       editor.value = source.fix;
       render(source.fix);
       paintEditor();
-      editor.focus();
+      jumpToTop();
       announce('Example loaded with one possible fix.');
     });
   }
