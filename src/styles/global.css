@@ -51,15 +51,9 @@
 }
 @font-face {
   font-family: "Sofia Sans";
-  src: url("/fonts/SofiaSans-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Sofia Sans";
-  src: url("/fonts/SofiaSans-ExtraBold.woff2") format("woff2");
-  font-weight: 800;
+  src: url("/fonts/SofiaSans-ExtraBold.woff2") format("woff2"),
+       url("/fonts/SofiaSans-ExtraBold.woff") format("woff");
+  font-weight: 700 800;
   font-style: normal;
   font-display: swap;
 }

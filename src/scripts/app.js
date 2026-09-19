@@ -84,17 +84,17 @@ function enableHeadingStops(root) {
     el.removeAttribute('tabindex');
   });
   root.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((el) => {
-    if (!el.hasAttribute('tabindex')) el.tabIndex = 0;
+    if (el.tabIndex !== 0) el.tabIndex = 0;
   });
 }
 
 function enableImageStops(root) {
   root.querySelectorAll('img').forEach((img) => {
     if (img.getAttribute('alt') === '') {
-      img.removeAttribute('tabindex');
+      if (img.hasAttribute('tabindex')) img.removeAttribute('tabindex');
       return;
     }
-    img.tabIndex = 0;
+    if (img.tabIndex !== 0) img.tabIndex = 0;
   });
 }
 
@@ -177,9 +177,7 @@ document.querySelectorAll('[data-stage]').forEach((stage) => {
   prepareStage(stage);
   new MutationObserver(() => prepareStage(stage)).observe(stage, {
     childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: ['alt', 'tabindex']
+    subtree: true
   });
 });
 
